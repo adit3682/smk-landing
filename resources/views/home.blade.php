@@ -151,13 +151,36 @@
         </div>
     </section>
 
-    {{-- KONTAK --}}
-    <section id="kontak" data-fade-in class="bg-blue-950 text-white py-20 px-6 opacity-0 translate-y-8 transition duration-700">
-        <div class="max-w-4xl mx-auto text-center">
-            <h2 class="text-3xl font-bold mb-4">Hubungi Kami</h2>
-            <p class="text-blue-200">{{ $profilSekolah->alamat ?? 'Alamat sekolah akan tampil di sini.' }}</p>
+    {{-- KONTAK / LOKASI --}}
+<section id="kontak" data-fade-in class="bg-blue-950 text-white py-20 px-6 opacity-0 translate-y-8 transition duration-700">
+    <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+
+        {{-- Kiri: alamat --}}
+        <div>
+            <p class="text-blue-300 text-xs uppercase tracking-wider mb-3">Alamat</p>
+            <p class="text-xl md:text-2xl font-semibold leading-relaxed">
+                {!! nl2br(e($profilSekolah->alamat ?? 'Alamat sekolah akan tampil di sini.')) !!}
+            </p>
         </div>
-    </section>
+
+        {{-- Kanan: Google Maps --}}
+        <div>
+            @if($profilSekolah?->gmaps_embed_url)
+                <iframe src="{{ $profilSekolah->gmaps_embed_url }}"
+                        class="w-full h-80 rounded-2xl border-0"
+                        allowfullscreen
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"
+                        title="Lokasi sekolah di Google Maps"></iframe>
+            @else
+                <div class="w-full h-80 rounded-2xl bg-blue-900/50 flex items-center justify-center text-blue-300 text-sm">
+                    Peta belum tersedia
+                </div>
+            @endif
+        </div>
+
+    </div>
+</section>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {

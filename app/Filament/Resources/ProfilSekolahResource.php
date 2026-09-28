@@ -102,6 +102,26 @@ class ProfilSekolahResource extends Resource
                                 'Tulis angka saja, tanpa spasi atau tanda hubung.'
                             ),
                     ]),
+
+                     // GOOGLE MAPS
+                Forms\Components\Textarea::make('gmaps_embed')
+                    ->label('Google Maps (kode sematkan)')
+                    ->rows(3)
+                    ->helperText(
+                        'Google Maps → cari lokasi sekolah → Bagikan → Sematkan peta → Salin HTML, lalu tempel di sini.'
+                    )
+                    ->rules([
+                        fn () => function (string $attribute, $value, \Closure $fail) {
+                            if (
+                                $value &&
+                                ! str_contains($value, 'google.com/maps/embed')
+                            ) {
+                                $fail(
+                                    'Isi dengan kode sematkan dari Google Maps (menu Sematkan peta), bukan link biasa.'
+                                );
+                            }
+                        },
+                    ]),
             ]);
     }
 
