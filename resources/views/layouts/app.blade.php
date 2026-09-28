@@ -74,29 +74,64 @@
             </div>
 
             {{-- IKUTI KAMI --}}
-            <div>
-                <h4 class="text-white font-semibold mb-2">Ikuti Kami</h4>
-                <p class="text-slate-400 text-sm mb-5">
-                    {{ $navProfil->nama_sekolah ?? 'SMK TI Bina Citra Informatika' }}
-                </p>
 
-                       <div class="flex gap-3">
+        <div>
+            <h4 class="text-white font-semibold mb-2">Ikuti Kami</h4>
+
+        <p class="text-slate-400 text-sm mb-5">
+            {{ $navProfil->nama_sekolah ?? 'SMK TI Bina Citra Informatika' }}
+        </p>
+
+        <div class="flex gap-3">
             @if($navProfil?->linkedin)
-                <a href="{{ $navProfil->linkedin }}" target="_blank" class="w-9 h-9 rounded-lg bg-slate-800 flex items-center justify-center hover:bg-slate-700 transition">
+                <a href="{{ $navProfil->linkedin }}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="w-9 h-9 rounded-lg bg-slate-800 flex items-center justify-center hover:bg-slate-700 transition">
                     <span class="text-xs font-bold">in</span>
                 </a>
             @endif
+
             @if($navProfil?->instagram)
-                <a href="{{ $navProfil->instagram }}" target="_blank" class="w-9 h-9 rounded-lg bg-slate-800 flex items-center justify-center hover:bg-slate-700 transition">
+                <a href="{{ $navProfil->instagram }}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="w-9 h-9 rounded-lg bg-slate-800 flex items-center justify-center hover:bg-slate-700 transition">
                     <span class="text-xs font-bold">ig</span>
                 </a>
             @endif
+
             @if($navProfil?->facebook)
-                <a href="{{ $navProfil->facebook }}" target="_blank" class="w-9 h-9 rounded-lg bg-slate-800 flex items-center justify-center hover:bg-slate-700 transition">
+                <a href="{{ $navProfil->facebook }}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="w-9 h-9 rounded-lg bg-slate-800 flex items-center justify-center hover:bg-slate-700 transition">
                     <span class="text-xs font-bold">f</span>
                 </a>
             @endif
         </div>
+
+        {{-- WHATSAPP --}}
+        @if($navProfil?->spmb_whatsapp)
+            @php
+                $whatsapp = preg_replace('/[^0-9]/', '', $navProfil->spmb_whatsapp);
+
+                if (str_starts_with($whatsapp, '0')) {
+                    $whatsapp = '62' . substr($whatsapp, 1);
+                }
+            @endphp
+
+            <a href="https://wa.me/{{ $whatsapp }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 mt-4 text-sm text-slate-400 hover:text-white transition">
+                <span class="font-medium">WhatsApp</span>
+                <span>{{ $navProfil->spmb_whatsapp }}</span>
+            </a>
+        @endif
+
+</div>
+
 
         </div>
 
