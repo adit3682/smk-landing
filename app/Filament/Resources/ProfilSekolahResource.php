@@ -76,6 +76,32 @@ class ProfilSekolahResource extends Resource
                 Forms\Components\TextInput::make('linkedin')
                     ->url()
                     ->placeholder('https://linkedin.com/company/namasekolah'),
+
+                // SPMB
+                Forms\Components\Section::make('SPMB')
+                    ->description('Ditampilkan di halaman /spmb')
+                    ->schema([
+                        Forms\Components\FileUpload::make('spmb_poster')
+                            ->image()
+                            ->directory('spmb')
+                            ->imageEditor()
+                            ->saveUploadedFileUsing(
+                                \App\Support\ImageUpload::webp('spmb', 90)
+                            )
+                            ->label('Poster SPMB'),
+
+                        Forms\Components\TextInput::make('spmb_link')
+                            ->url()
+                            ->label('Link Pendaftaran')
+                            ->placeholder('https://...'),
+
+                        Forms\Components\TextInput::make('spmb_whatsapp')
+                            ->label('Nomor WhatsApp')
+                            ->placeholder('081234567890')
+                            ->helperText(
+                                'Tulis angka saja, tanpa spasi atau tanda hubung.'
+                            ),
+                    ]),
             ]);
     }
 

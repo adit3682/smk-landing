@@ -17,8 +17,8 @@
             <p class="text-blue-200 text-lg mb-8">
                 {{ $profilSekolah->nama_sekolah ?? 'SMK Teknologi Informasi' }} — modern, profesional, dan siap kerja.
             </p>
-            <a id="ppdb" href="{{ $linkPpdb ?? '#' }}" target="_blank" class="inline-block bg-white text-blue-900 font-semibold px-8 py-3 rounded-full hover:bg-blue-100 transition">
-                Daftar Sekarang
+            <a  href="{{ route('spmb') }}" class="inline-block bg-white text-blue-900 font-semibold px-8 py-3 rounded-full hover:bg-blue-100 transition">
+                SPMB
             </a>
         </div>
     </section>
@@ -89,7 +89,7 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                 @foreach($jurusans as $jurusan)
                     <a href="{{ route('jurusan.show', $jurusan->slug) }}" class="block bg-white border border-blue-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition">
-                        <div class="w-10 h-10 rounded-lg mb-4 overflow-hidden {{ $jurusan->icon ? '' : 'bg-blue-900 flex items-center justify-center' }}"> @if($jurusan->icon) 
+                        <div class="w-20 h-20 rounded-lg mb-5 overflow-hidden {{ $jurusan->icon ? '' : 'bg-blue-900 flex items-center justify-center' }}"> @if($jurusan->icon) 
                         <img src="{{ Storage::url($jurusan->icon) }}" alt="{{ $jurusan->nama }}" class="w-full h-full object-contain"> @endif </div>
                         <div class="font-semibold text-blue-950">{{ $jurusan->nama }}</div>
                         <p class="text-sm text-slate-500 mt-2">{{ Str::limit($jurusan->deskripsi, 70) }}</p>

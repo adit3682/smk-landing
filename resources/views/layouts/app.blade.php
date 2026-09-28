@@ -40,9 +40,8 @@
             <a href="#kontak" class="hover:text-blue-600">Kontak</a>
         </div>
 
-        <a href="#ppdb"
-            class="bg-blue-900 text-white text-sm font-semibold px-5 py-2 rounded-full hover:bg-blue-800 transition">
-            Daftar Sekarang
+        <a href="{{ route('spmb') }}" class="bg-blue-900 text-white text-sm font-semibold px-5 py-2 rounded-full hover:bg-blue-800 transition">
+            SPMB 
         </a>
 
     </nav>
@@ -65,6 +64,7 @@
                 <a href="{{ route('artikel.index') }}" class="block text-sm font-medium hover:text-white transition">Artikel</a>
                 <a href="{{ route('transparansi') }}" class="block text-sm font-medium hover:text-white transition">Transparansi</a>
                 <a href="#kontak" class="block text-sm font-medium hover:text-white transition">Kontak</a>
+                <a href="{{ route('spmb') }}" class="block text-sm font-medium hover:text-white transition">SPMB</a> 
             </div>
 
             {{-- LEGAL --}}
