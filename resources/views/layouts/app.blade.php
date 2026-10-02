@@ -83,33 +83,17 @@
         </p>
 
         <div class="flex gap-3">
-            @if($navProfil?->linkedin)
-                <a href="{{ $navProfil->linkedin }}"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="w-9 h-9 rounded-lg bg-slate-800 flex items-center justify-center hover:bg-slate-700 transition">
-                    <span class="text-xs font-bold">in</span>
-                </a>
-            @endif
-
-            @if($navProfil?->instagram)
-                <a href="{{ $navProfil->instagram }}"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="w-9 h-9 rounded-lg bg-slate-800 flex items-center justify-center hover:bg-slate-700 transition">
-                    <span class="text-xs font-bold">ig</span>
-                </a>
-            @endif
-
-            @if($navProfil?->facebook)
-                <a href="{{ $navProfil->facebook }}"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="w-9 h-9 rounded-lg bg-slate-800 flex items-center justify-center hover:bg-slate-700 transition">
-                    <span class="text-xs font-bold">f</span>
-                </a>
-            @endif
-        </div>
+    @if($navProfil?->instagram)
+        <a href="{{ $navProfil->instagram }}" target="_blank" class="w-9 h-9 rounded-lg bg-slate-800 flex items-center justify-center hover:bg-slate-700 transition">
+            <span class="text-xs font-bold">ig</span>
+        </a>
+    @endif
+    @if($navProfil?->tiktok)
+        <a href="{{ $navProfil->tiktok }}" target="_blank" class="w-9 h-9 rounded-lg bg-slate-800 flex items-center justify-center hover:bg-slate-700 transition">
+            <span class="text-xs font-bold">tt</span>
+        </a>
+    @endif
+</div>
 
         {{-- WHATSAPP --}}
         @if($navProfil?->spmb_whatsapp)

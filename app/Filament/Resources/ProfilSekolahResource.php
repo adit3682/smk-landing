@@ -19,111 +19,109 @@ class ProfilSekolahResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    public static function form(Form $form): Form
-    {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('nama_sekolah')
-                    ->required()
-                    ->maxLength(255),
+   public static function form(Form $form): Form
+{
+    return $form
+        ->schema([
+            Forms\Components\TextInput::make('nama_sekolah')
+                ->required()
+                ->maxLength(255),
 
-                Forms\Components\FileUpload::make('foto_hero')
-                    ->image()
-                    ->directory('hero')
-                    ->imageEditor()
-                    ->label('Foto Background Hero')
-                    ->saveUploadedFileUsing(\App\Support\ImageUpload::webp('hero')),
+            Forms\Components\FileUpload::make('foto_hero')
+                ->image()
+                ->directory('hero')
+                ->imageEditor()
+                ->label('Foto Background Hero')
+                ->saveUploadedFileUsing(\App\Support\ImageUpload::webp('hero')),
 
-                Forms\Components\FileUpload::make('logo')
-                    ->image()
-                    ->directory('logo')
-                    ->imageEditor()
-                    ->label('Logo Sekolah')
-                    ->saveUploadedFileUsing(\App\Support\ImageUpload::webp('logo')),
+            Forms\Components\FileUpload::make('logo')
+                ->image()
+                ->directory('logo')
+                ->imageEditor()
+                ->label('Logo Sekolah')
+                ->saveUploadedFileUsing(\App\Support\ImageUpload::webp('logo')),
 
-                Forms\Components\TextInput::make('npsn')
-                    ->maxLength(255)
-                    ->default(null),
+            Forms\Components\TextInput::make('npsn')
+                ->maxLength(255)
+                ->default(null),
 
-                Forms\Components\Textarea::make('alamat')
-                    ->columnSpanFull(),
+            Forms\Components\Textarea::make('alamat')
+                ->columnSpanFull(),
 
-                Forms\Components\TextInput::make('kode_pos')
-                    ->maxLength(255)
-                    ->default(null),
+            Forms\Components\TextInput::make('kode_pos')
+                ->maxLength(255)
+                ->default(null),
 
-                Forms\Components\TextInput::make('nama_kepala_sekolah')
-                    ->maxLength(255)
-                    ->default(null),
+            Forms\Components\TextInput::make('nama_kepala_sekolah')
+                ->maxLength(255)
+                ->default(null),
 
-                Forms\Components\Textarea::make('visi')
-                    ->columnSpanFull(),
+            Forms\Components\Textarea::make('visi')
+                ->columnSpanFull(),
 
-                Forms\Components\Textarea::make('misi')
-                    ->columnSpanFull(),
+            Forms\Components\Textarea::make('misi')
+                ->columnSpanFull(),
 
-                Forms\Components\Textarea::make('profil_yayasan')
-                    ->columnSpanFull(),
+            Forms\Components\Textarea::make('profil_yayasan')
+                ->columnSpanFull(),
 
-                Forms\Components\TextInput::make('instagram')
-                    ->url()
-                    ->placeholder('https://instagram.com/namaakun'),
+            Forms\Components\TextInput::make('instagram')
+                ->url()
+                ->placeholder('https://instagram.com/namaakun'),
 
-                Forms\Components\TextInput::make('facebook')
-                    ->url()
-                    ->placeholder('https://facebook.com/namahalaman'),
+            Forms\Components\TextInput::make('tiktok')
+                ->url()
+                ->placeholder('https://tiktok.com/@namaakun'),
 
-                Forms\Components\TextInput::make('linkedin')
-                    ->url()
-                    ->placeholder('https://linkedin.com/company/namasekolah'),
+            // SPMB
+            Forms\Components\Section::make('SPMB')
+                ->description('Ditampilkan di halaman /spmb')
+                ->schema([
+                    Forms\Components\FileUpload::make('spmb_posters')
+                        ->image()
+                        ->multiple()
+                        ->reorderable()
+                        ->directory('spmb')
+                        ->imageEditor()
+                        ->saveUploadedFileUsing(
+                            \App\Support\ImageUpload::webp('spmb', 90)
+                        )
+                        ->label('Poster SPMB (bisa lebih dari satu)'),
 
-                // SPMB
-                Forms\Components\Section::make('SPMB')
-                    ->description('Ditampilkan di halaman /spmb')
-                    ->schema([
-                        Forms\Components\FileUpload::make('spmb_poster')
-                            ->image()
-                            ->directory('spmb')
-                            ->imageEditor()
-                            ->saveUploadedFileUsing(
-                                \App\Support\ImageUpload::webp('spmb', 90)
-                            )
-                            ->label('Poster SPMB'),
+                    Forms\Components\TextInput::make('spmb_link')
+                        ->url()
+                        ->label('Link Pendaftaran')
+                        ->placeholder('https://...'),
 
-                        Forms\Components\TextInput::make('spmb_link')
-                            ->url()
-                            ->label('Link Pendaftaran')
-                            ->placeholder('https://...'),
+                    Forms\Components\TextInput::make('spmb_whatsapp')
+                        ->label('Nomor WhatsApp')
+                        ->placeholder('081234567890')
+                        ->helperText(
+                            'Tulis angka saja, tanpa spasi atau tanda hubung.'
+                        ),
+                ]),
 
-                        Forms\Components\TextInput::make('spmb_whatsapp')
-                            ->label('Nomor WhatsApp')
-                            ->placeholder('081234567890')
-                            ->helperText(
-                                'Tulis angka saja, tanpa spasi atau tanda hubung.'
-                            ),
-                    ]),
-
-                     // GOOGLE MAPS
-                Forms\Components\Textarea::make('gmaps_embed')
-                    ->label('Google Maps (kode sematkan)')
-                    ->rows(3)
-                    ->helperText(
-                        'Google Maps → cari lokasi sekolah → Bagikan → Sematkan peta → Salin HTML, lalu tempel di sini.'
-                    )
-                    ->rules([
-                        fn () => function (string $attribute, $value, \Closure $fail) {
-                            if (
-                                $value &&
-                                ! str_contains($value, 'google.com/maps/embed')
-                            ) {
-                                $fail(
-                                    'Isi dengan kode sematkan dari Google Maps (menu Sematkan peta), bukan link biasa.'
-                                );
-                            }
-                        },
-                    ]),
-            ]);
-    }
+                 // GOOGLE MAPS
+            Forms\Components\Textarea::make('gmaps_embed')
+                ->label('Google Maps (kode sematkan)')
+                ->rows(3)
+                ->helperText(
+                    'Google Maps → cari lokasi sekolah → Bagikan → Sematkan peta → Salin HTML, lalu tempel di sini.'
+                )
+                ->rules([
+                    fn () => function (string $attribute, $value, \Closure $fail) {
+                        if (
+                            $value &&
+                            ! str_contains($value, 'google.com/maps/embed')
+                        ) {
+                            $fail(
+                                'Isi dengan kode sematkan dari Google Maps (menu Sematkan peta), bukan link biasa.'
+                            );
+                        }
+                    },
+                ]),
+        ]);
+}
 
     public static function table(Table $table): Table
     {

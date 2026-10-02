@@ -22,15 +22,17 @@ class ProfilSekolah extends Model
         'instagram',
         'facebook',
         'linkedin',
-        'spmb_poster',
+        'tiktok', 
+        'spmb_posters',
         'spmb_link',
         'spmb_whatsapp',
         'gmaps_embed',
     ];
 
     protected $casts = [
-        'misi' => 'array',
-    ];
+    'misi' => 'array',
+    'spmb_posters' => 'array',
+];
 
     public function getGmapsEmbedUrlAttribute(): ?string
     {
