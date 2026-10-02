@@ -27,38 +27,54 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
 
             {{-- Poster --}}
-            <div>
-                @if(!empty($profil->spmb_posters))
-                    <div class="space-y-4" x-data="{ active: 0 }">
-                        @foreach($profil->spmb_posters as $i => $poster)
-                            <a href="{{ Storage::url($poster) }}" target="_blank"
-                               x-show="active === {{ $i }}"
-                               class="block group relative">
-                                <img src="{{ Storage::url($poster) }}"
-                                     alt="Poster SPMB {{ $i + 1 }}"
-                                     class="w-full rounded-2xl border border-blue-100 shadow-sm group-hover:opacity-90 transition">
-                                <span class="absolute bottom-3 right-3 bg-blue-900/90 text-white text-xs px-3 py-1.5 rounded-full opacity-0 group-hover:opacity-100 transition">
-                                    Klik untuk perbesar
-                                </span>
-                            </a>
-                        @endforeach
+            {{-- Poster --}}
+<div>
+    @if(!empty($profil->spmb_posters))
+        {{-- Desktop: tampilkan semua poster --}}
+        <div class="hidden md:flex md:flex-col gap-4">
+            @foreach($profil->spmb_posters as $i => $poster)
+                <a href="{{ Storage::url($poster) }}" target="_blank" class="block group relative">
+                    <img src="{{ Storage::url($poster) }}"
+                         alt="Poster SPMB {{ $i + 1 }}"
+                         class="w-full rounded-2xl border border-blue-100 shadow-sm group-hover:opacity-90 transition">
+                    <span class="absolute bottom-3 right-3 bg-blue-900/90 text-white text-xs px-3 py-1.5 rounded-full opacity-0 group-hover:opacity-100 transition">
+                        Klik untuk perbesar
+                    </span>
+                </a>
+            @endforeach
+        </div>
 
-                        @if(count($profil->spmb_posters) > 1)
-                            <div class="flex gap-2 justify-center">
-                                @foreach($profil->spmb_posters as $i => $poster)
-                                    <button @click="active = {{ $i }}"
-                                            :class="active === {{ $i }} ? 'bg-blue-900' : 'bg-blue-200'"
-                                            class="w-2.5 h-2.5 rounded-full transition"></button>
-                                @endforeach
-                            </div>
-                        @endif
-                    </div>
-                @else
-                    <div class="w-full aspect-[3/4] bg-blue-50 rounded-2xl flex items-center justify-center text-slate-400 text-sm">
-                        Poster belum tersedia
-                    </div>
-                @endif
-            </div>
+        {{-- Mobile: slider --}}
+        <div class="md:hidden space-y-4" x-data="{ active: 0 }">
+            @foreach($profil->spmb_posters as $i => $poster)
+                <a href="{{ Storage::url($poster) }}" target="_blank"
+                   x-show="active === {{ $i }}"
+                   class="block group relative">
+                    <img src="{{ Storage::url($poster) }}"
+                         alt="Poster SPMB {{ $i + 1 }}"
+                         class="w-full rounded-2xl border border-blue-100 shadow-sm group-hover:opacity-90 transition">
+                    <span class="absolute bottom-3 right-3 bg-blue-900/90 text-white text-xs px-3 py-1.5 rounded-full opacity-0 group-hover:opacity-100 transition">
+                        Klik untuk perbesar
+                    </span>
+                </a>
+            @endforeach
+
+            @if(count($profil->spmb_posters) > 1)
+                <div class="flex gap-2 justify-center">
+                    @foreach($profil->spmb_posters as $i => $poster)
+                        <button @click="active = {{ $i }}"
+                                :class="active === {{ $i }} ? 'bg-blue-900' : 'bg-blue-200'"
+                                class="w-2.5 h-2.5 rounded-full transition"></button>
+                    @endforeach
+                </div>
+            @endif
+        </div>
+    @else
+        <div class="w-full aspect-[3/4] bg-blue-50 rounded-2xl flex items-center justify-center text-slate-400 text-sm">
+            Poster belum tersedia
+        </div>
+    @endif
+</div>
 
             {{-- Info & tombol --}}
             <div class="space-y-6">
