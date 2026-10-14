@@ -5,21 +5,108 @@
 @section('content')
 
     {{-- HERO --}}
-    <section id="hero-section" class="relative min-h-screen flex flex-col items-center justify-center text-center px-6 bg-blue-950 text-white overflow-hidden">
-       <div class="absolute inset-0 bg-cover bg-center opacity-30"
-     style="background-image: url('{{ $profilSekolah->foto_hero ? Storage::url($profilSekolah->foto_hero) : 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1920' }}'); mask-image: linear-gradient(to bottom, black 60%, transparent 100%);">
+    <section id="hero-section" class="relative min-h-[90vh] flex items-center px-6 pt-28 pb-16 bg-gradient-to-br from-blue-950 via-blue-900 to-blue-800 text-white overflow-hidden">
+
+        {{-- dekorasi titik-titik, murni visual --}}
+        <div class="absolute -right-10 top-10 w-40 h-40 opacity-10" style="background-image: radial-gradient(circle, white 1.5px, transparent 1.5px); background-size: 16px 16px;"></div>
+
+        <div class="relative z-10 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center w-full">
+
+            {{-- Kiri: headline --}}
+            <div class="text-center lg:text-left">
+                <h1 class="text-4xl md:text-5xl font-extrabold leading-tight mb-5">
+                    Mencetak Talenta Digital<br>
+                    Masa Depan Indonesia
+                </h1>
+                <p class="text-blue-200 text-lg mb-8 max-w-md mx-auto lg:mx-0">
+                    {{ $profilSekolah->nama_sekolah ?? 'SMK TI Bina Citra Informatika Purwokerto' }} — modern, profesional, dan siap kerja.
+                </p>
+                <a href="{{ route('spmb') }}" class="inline-block bg-white text-blue-900 font-semibold px-8 py-3 rounded-full hover:bg-blue-100 transition">
+                    SPMB
+                </a>
+            </div>
+
+            {{-- Kanan: foto --}}
+            <div class="flex justify-center lg:justify-end">
+                @if($profilSekolah?->foto_hero)
+                    <img src="{{ Storage::url($profilSekolah->foto_hero) }}"
+                         alt="{{ $profilSekolah->nama_sekolah }}"
+                         class="w-full max-w-md rounded-3xl shadow-2xl object-cover aspect-[4/5]">
+                @else
+                    <div class="w-full max-w-md aspect-[4/5] rounded-3xl bg-blue-800/60 border border-blue-700 flex items-center justify-center text-blue-300 text-sm">
+                        Foto hero belum diupload
+                    </div>
+                @endif
+            </div>
+
         </div>
-        <div class="relative z-10 max-w-3xl">
-            <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-6">
-                Mencetak Talenta Digital<br>
-                Masa Depan Indonesia
-            </h1>
-            <p class="text-blue-200 text-lg mb-8">
-                {{ $profilSekolah->nama_sekolah ?? 'SMK Teknologi Informasi' }} — modern, profesional, dan siap kerja.
-            </p>
-            <a  href="{{ route('spmb') }}" class="inline-block bg-white text-blue-900 font-semibold px-8 py-3 rounded-full hover:bg-blue-100 transition">
-                SPMB
-            </a>
+    </section>
+
+    {{-- SAMBUTAN KEPALA SEKOLAH --}}
+    @if($profilSekolah?->sambutan_kepala_sekolah)
+        <section data-fade-in class="py-20 px-6 opacity-0 translate-y-8 transition duration-700">
+            <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 items-center">
+
+                <div class="md:col-span-1 flex justify-center">
+                    @if($profilSekolah->foto_kepala_sekolah)
+                        <img src="{{ Storage::url($profilSekolah->foto_kepala_sekolah) }}"
+                             alt="{{ $profilSekolah->nama_kepala_sekolah }}"
+                             class="w-48 h-48 rounded-full object-cover shadow-md">
+                    @else
+                        <div class="w-48 h-48 rounded-full bg-blue-100 flex items-center justify-center text-blue-400 font-bold text-4xl">
+                            {{ substr($profilSekolah->nama_kepala_sekolah ?? 'K', 0, 1) }}
+                        </div>
+                    @endif
+                </div>
+
+                <div class="md:col-span-2 text-center md:text-left">
+                    <span class="text-sm font-semibold text-blue-600 uppercase tracking-wide">Sambutan Kepala Sekolah</span>
+                    <p class="text-slate-600 italic leading-relaxed mt-4 mb-5">
+                        "{{ $profilSekolah->sambutan_kepala_sekolah }}"
+                    </p>
+                    <div class="font-bold text-blue-950">{{ $profilSekolah->nama_kepala_sekolah ?? '-' }}</div>
+                    <div class="text-sm text-slate-500">Kepala Sekolah</div>
+                </div>
+
+            </div>
+        </section>
+    @endif
+
+    {{-- MENGAPA MEMILIH KAMI --}}
+    <section id="mengapa-memilih" data-fade-in class="py-16 px-4 sm:px-6 bg-white opacity-0 translate-y-8 transition duration-700">
+        <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+
+            <div>
+                @if (file_exists(public_path('images/mengapa-memilih.jpg')))
+                    <img src="{{ asset('images/mengapa-memilih.jpg') }}"
+                         alt="Mengapa memilih {{ $profilSekolah->nama_sekolah ?? 'sekolah kami' }}"
+                         class="w-full aspect-[16/9] object-cover shadow-md">
+                @else
+                    <div class="w-full aspect-[16/9] bg-blue-100 flex items-center justify-center text-blue-400 text-sm">
+                        Letakkan gambar di public/images/mengapa-memilih.jpg
+                    </div>
+                @endif
+            </div>
+
+            <div class="text-center lg:text-left">
+                <h2 class="font-serif text-3xl sm:text-4xl font-bold leading-tight">
+                    <span class="text-amber-500">Mengapa memilih</span><br>
+                    <span class="text-slate-900">{{ $profilSekolah->nama_sekolah ?? 'SMK Kami' }} ?</span>
+                </h2>
+
+                <p class="mt-5 text-slate-600 leading-8 text-justify">
+                    <strong class="text-slate-900">{{ $profilSekolah->nama_sekolah ?? 'Sekolah kami' }}</strong>
+                    dikenal sebagai sekolah kejuruan yang berwawasan teknologi dalam mencetak lulusan
+                    yang <strong class="text-slate-900">kompeten, berkarakter, dan siap kerja</strong>,
+                    serta mampu bersaing di dunia usaha dan dunia industri.
+                </p>
+
+                <a href="{{ route('profil-sekolah') }}"
+                   class="inline-block mt-8 px-8 py-3 rounded-full bg-amber-500 hover:bg-amber-600 text-white text-sm font-medium transition">
+                    Selengkapnya
+                </a>
+            </div>
+
         </div>
     </section>
 
@@ -89,7 +176,7 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                 @foreach($jurusans as $jurusan)
                     <a href="{{ route('jurusan.show', $jurusan->slug) }}" class="block bg-white border border-blue-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition">
-                        <div class="w-20 h-20 rounded-lg mb-5 overflow-hidden {{ $jurusan->icon ? '' : 'bg-blue-900 flex items-center justify-center' }}"> @if($jurusan->icon) 
+                        <div class="w-20 h-20 rounded-lg mb-5 overflow-hidden {{ $jurusan->icon ? '' : 'bg-blue-900 flex items-center justify-center' }}"> @if($jurusan->icon)
                         <img src="{{ Storage::url($jurusan->icon) }}" alt="{{ $jurusan->nama }}" class="w-full h-full object-contain"> @endif </div>
                         <div class="font-semibold text-blue-950">{{ $jurusan->nama }}</div>
                         <p class="text-sm text-slate-500 mt-2">{{ Str::limit($jurusan->deskripsi, 70) }}</p>
@@ -107,11 +194,11 @@
                 <div id="carousel-galeri" class="flex gap-6 w-max">
                     @forelse($galeris as $galeri)
                         <div class="flex-shrink-0 w-64">
-                           @if(!empty($galeri->foto))
+                            @if(!empty($galeri->foto))
                                 <img src="{{ Storage::url($galeri->foto) }}" alt="{{ $galeri->judul }}" class="w-full aspect-video object-cover rounded-xl mb-2">
                             @else
                                 <div class="w-full aspect-video bg-blue-200 rounded-xl mb-2"></div>
-                            @endif 
+                            @endif
                             <div class="text-sm font-medium text-blue-950 truncate">{{ $galeri->judul }}</div>
                             <div class="text-xs text-slate-500">{{ $galeri->created_at->format('d M Y') }}</div>
                         </div>
@@ -123,64 +210,198 @@
         </div>
     </section>
 
-    {{-- ARTIKEL --}}
-    <section data-fade-in class="py-20 px-6 opacity-0 translate-y-8 transition duration-700">
-        <div class="max-w-6xl mx-auto">
-            <h2 class="text-3xl font-bold text-blue-950 text-center mb-12">Artikel & Berita</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                @forelse($artikels as $artikel)
-                    <a href="{{ route('artikel.show', $artikel->slug) }}" class="block bg-white border border-blue-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition">
-                        @if(!empty($artikel->thumbnail))
-                            <img src="{{ Storage::url($artikel->thumbnail) }}" alt="{{ $artikel->judul }}" class="w-full aspect-video object-cover">
-                        @else
-                            <div class="w-full aspect-video bg-blue-100"></div>
-                        @endif
-                        <div class="p-5">
-                            <span class="text-xs font-semibold text-blue-600 uppercase">{{ $artikel->kategori }}</span>
-                            <h3 class="font-semibold text-blue-950 mt-1 line-clamp-2">{{ $artikel->judul }}</h3>
-                            <div class="text-xs text-slate-400 mt-2">{{ $artikel->published_at?->format('d M Y') ?? $artikel->created_at->format('d M Y') }}</div>
-                        </div>
-                    </a>
-                @empty
-                    <p class="text-slate-400 text-sm">Belum ada artikel.</p>
-                @endforelse
-            </div>
-            <div class="text-center mt-10">
-                <a href="{{ route('artikel.index') }}" class="text-blue-700 font-semibold hover:underline">Lihat Semua Artikel &rarr;</a>
+    {{-- BERITA & ACARA (carousel) --}}
+    @php
+        $beritaList = $artikels ?? collect();
+    @endphp
+
+    @if ($beritaList->count())
+    <section id="berita" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
+            <h2 class="text-center font-serif text-3xl sm:text-4xl font-bold text-amber-500 mb-10">
+                Berita &amp; Acara
+            </h2>
+
+            <div id="berita-carousel" class="relative">
+                <div id="berita-track"
+                     class="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-2"
+                     style="scrollbar-width: none; -ms-overflow-style: none;">
+                    @foreach ($beritaList as $a)
+                        @php
+                            $judul   = $a->judul ?? $a->title;
+                            $gambar  = $a->gambar ?? $a->thumbnail ?? $a->foto ?? null;
+                            $tanggal = $a->published_at ?? $a->created_at;
+                            $ringkas = \Illuminate\Support\Str::limit(
+                                strip_tags($a->ringkasan ?? $a->excerpt ?? $a->isi ?? $a->konten ?? ''), 140
+                            );
+                            $url     = route('artikel.show', $a->slug);
+                        @endphp
+
+                        <article class="berita-card snap-start shrink-0 w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]">
+                            <a href="{{ $url }}" class="block overflow-hidden bg-slate-100 aspect-[3/2]">
+                                @if ($gambar)
+                                    <img src="{{ asset('storage/' . $gambar) }}" alt="{{ $judul }}"
+                                         loading="lazy" class="w-full h-full object-cover">
+                                @else
+                                    <div class="w-full h-full flex items-center justify-center text-slate-400 text-sm">
+                                        Belum ada gambar
+                                    </div>
+                                @endif
+                            </a>
+
+                            <h3 class="mt-3 font-serif text-xl font-semibold text-slate-900 leading-snug line-clamp-3">
+                                <a href="{{ $url }}">{{ $judul }}</a>
+                            </h3>
+
+                            <p class="mt-3 text-sm text-sky-600">
+                                {{ \Carbon\Carbon::parse($tanggal)->locale('id')->translatedFormat('F j, Y') }}
+                            </p>
+
+                            <p class="mt-3 text-slate-600 text-sm leading-7 line-clamp-3">{{ $ringkas }}</p>
+
+                            <a href="{{ $url }}"
+                               class="inline-block mt-5 px-7 py-3 rounded bg-amber-500 hover:bg-amber-600 text-white text-sm font-medium transition">
+                                Selengkapnya
+                            </a>
+                        </article>
+                    @endforeach
+                </div>
+
+                <div id="berita-dots" class="flex justify-center gap-3 mt-8"></div>
             </div>
         </div>
     </section>
 
+    <script>
+    (function () {
+        const track = document.getElementById('berita-track');
+        const dotsBox = document.getElementById('berita-dots');
+        if (!track || !dotsBox) return;
+
+        const cards = track.querySelectorAll('.berita-card');
+        let pages = 1, current = 0, timer;
+
+        const perView = () => window.innerWidth >= 1024 ? 3 : (window.innerWidth >= 768 ? 2 : 1);
+
+        function build() {
+            pages = Math.max(1, Math.ceil(cards.length / perView()));
+            dotsBox.innerHTML = '';
+            for (let i = 0; i < pages; i++) {
+                const b = document.createElement('button');
+                b.type = 'button';
+                b.setAttribute('aria-label', 'Halaman ' + (i + 1));
+                b.className = 'w-3 h-3 rounded-full transition';
+                b.addEventListener('click', () => { go(i); restart(); });
+                dotsBox.appendChild(b);
+            }
+            paint();
+        }
+
+        function paint() {
+            [...dotsBox.children].forEach((d, i) => {
+                d.style.background = i === current ? '#f59e0b' : '#1fa6b8';
+            });
+        }
+
+        function go(i) {
+            current = (i + pages) % pages;
+            const card = cards[Math.min(current * perView(), cards.length - 1)];
+            track.scrollTo({ left: card.offsetLeft - track.offsetLeft, behavior: 'smooth' });
+            paint();
+        }
+
+        let t;
+        track.addEventListener('scroll', () => {
+            clearTimeout(t);
+            t = setTimeout(() => {
+                const w = cards[0].offsetWidth + 24;
+                current = Math.min(pages - 1, Math.round(track.scrollLeft / (w * perView())));
+                paint();
+            }, 80);
+        });
+
+        function restart() { clearInterval(timer); timer = setInterval(() => go(current + 1), 5000); }
+
+        window.addEventListener('resize', () => { current = 0; build(); });
+        build();
+        restart();
+    })();
+    </script>
+    @endif
+
+    {{-- FASILITAS --}}
+    @if (isset($sarpras) && $sarpras->count())
+    <section id="fasilitas" data-fade-in class="py-16 px-4 sm:px-6 bg-white opacity-0 translate-y-8 transition duration-700">
+        <div class="max-w-6xl mx-auto">
+
+            <div class="text-center mb-10">
+                <h2 class="font-serif text-3xl sm:text-4xl font-bold text-amber-500">Fasilitas</h2>
+                <p class="mt-3 text-slate-600">
+                    <strong class="text-slate-900">{{ $profilSekolah->nama_sekolah ?? 'Sekolah kami' }}</strong>
+                    menyediakan fasilitas terbaik untuk mendukung kegiatan belajar mengajar.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-2">
+                @foreach ($sarpras as $item)
+                    <a href="{{ route('fasilitas') }}"
+                       class="group relative block aspect-square overflow-hidden rounded-2xl bg-slate-200">
+                        @if (!empty($item->foto))
+                            <img src="{{ Storage::url($item->foto) }}" alt="{{ $item->nama }}" loading="lazy"
+                                 class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
+                        @else
+                            <div class="w-full h-full bg-blue-100"></div>
+                        @endif
+
+                        <div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition"></div>
+
+                        <div class="absolute inset-x-0 bottom-0 p-4 text-white text-sm font-semibold
+                                    opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition">
+                            {{ $item->nama }}
+                        </div>
+                    </a>
+                @endforeach
+            </div>
+
+            <div class="text-center mt-10">
+                <a href="{{ route('fasilitas') }}"
+                   class="inline-block px-8 py-3 rounded-full bg-amber-500 hover:bg-amber-600 text-white text-sm font-medium transition">
+                    Lihat Semua Fasilitas
+                </a>
+            </div>
+
+        </div>
+    </section>
+    @endif
+
     {{-- KONTAK / LOKASI --}}
-<section id="kontak" data-fade-in class="bg-blue-950 text-white py-20 px-6 opacity-0 translate-y-8 transition duration-700">
-    <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+    <section id="kontak" data-fade-in class="bg-blue-950 text-white py-20 px-6 opacity-0 translate-y-8 transition duration-700">
+        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
 
-        {{-- Kiri: alamat --}}
-        <div>
-            <p class="text-blue-300 text-xs uppercase tracking-wider mb-3">Alamat</p>
-            <p class="text-xl md:text-2xl font-semibold leading-relaxed">
-                {!! nl2br(e($profilSekolah->alamat ?? 'Alamat sekolah akan tampil di sini.')) !!}
-            </p>
+            <div>
+                <p class="text-blue-300 text-xs uppercase tracking-wider mb-3">Alamat</p>
+                <p class="text-xl md:text-2xl font-semibold leading-relaxed">
+                    {!! nl2br(e($profilSekolah->alamat ?? 'Alamat sekolah akan tampil di sini.')) !!}
+                </p>
+            </div>
+
+            <div>
+                @if($profilSekolah?->gmaps_embed_url)
+                    <iframe src="{{ $profilSekolah->gmaps_embed_url }}"
+                            class="w-full h-80 rounded-2xl border-0"
+                            allowfullscreen
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"
+                            title="Lokasi sekolah di Google Maps"></iframe>
+                @else
+                    <div class="w-full h-80 rounded-2xl bg-blue-900/50 flex items-center justify-center text-blue-300 text-sm">
+                        Peta belum tersedia
+                    </div>
+                @endif
+            </div>
+
         </div>
-
-        {{-- Kanan: Google Maps --}}
-        <div>
-            @if($profilSekolah?->gmaps_embed_url)
-                <iframe src="{{ $profilSekolah->gmaps_embed_url }}"
-                        class="w-full h-80 rounded-2xl border-0"
-                        allowfullscreen
-                        loading="lazy"
-                        referrerpolicy="no-referrer-when-downgrade"
-                        title="Lokasi sekolah di Google Maps"></iframe>
-            @else
-                <div class="w-full h-80 rounded-2xl bg-blue-900/50 flex items-center justify-center text-blue-300 text-sm">
-                    Peta belum tersedia
-                </div>
-            @endif
-        </div>
-
-    </div>
-</section>
+    </section>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {

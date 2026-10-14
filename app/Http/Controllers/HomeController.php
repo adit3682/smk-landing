@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{Guru, Jurusan, Galeri, Artikel, ProfilSekolah, DataSiswaTahunan, Staf, Pengaturan};
+use App\Models\{Guru, Jurusan, Galeri, Artikel, ProfilSekolah, DataSiswaTahunan, Staf, Pengaturan, Sarpras};
 
 class HomeController extends Controller
 {
@@ -14,6 +14,7 @@ class HomeController extends Controller
             'jurusans' => Jurusan::all(),
             'galeris' => Galeri::orderBy('urutan')->get(),
             'artikels' => Artikel::where('status', 'publish')->latest('published_at')->take(3)->get(),
+            'sarpras' => Sarpras::take(4)->get(),
             'siswaAktif' => DataSiswaTahunan::latest('tahun_ajaran')->value('jumlah') ?? 0,
             'jumlahGuruStaf' => Guru::count() + Staf::count(),
             'jumlahJurusan' => Jurusan::count(),

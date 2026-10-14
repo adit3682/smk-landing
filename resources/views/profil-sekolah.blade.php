@@ -18,6 +18,33 @@
         </div>
     </section>
 
+    {{-- SAMBUTAN KEPALA SEKOLAH --}}
+    @if($profilSekolah?->sambutan_kepala_sekolah)
+        <section data-fade-in class="mb-16 opacity-0 translate-y-8 transition duration-700">
+            <h2 class="text-2xl font-bold text-blue-900 mb-6">Sambutan Kepala Sekolah</h2>
+            <div class="bg-blue-50 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row gap-6 items-center md:items-start">
+
+                @if($profilSekolah->foto_kepala_sekolah)
+                    <img src="{{ Storage::url($profilSekolah->foto_kepala_sekolah) }}"
+                         alt="{{ $profilSekolah->nama_kepala_sekolah }}"
+                         class="w-32 h-32 rounded-full object-cover shadow-sm flex-shrink-0">
+                @else
+                    <div class="w-32 h-32 rounded-full bg-blue-100 flex items-center justify-center text-blue-400 font-bold text-3xl flex-shrink-0">
+                        {{ substr($profilSekolah->nama_kepala_sekolah ?? 'K', 0, 1) }}
+                    </div>
+                @endif
+
+                <div class="text-center md:text-left">
+                    <p class="text-slate-600 italic leading-relaxed mb-4">
+                        "{{ $profilSekolah->sambutan_kepala_sekolah }}"
+                    </p>
+                    <div class="font-bold text-blue-950">{{ $profilSekolah->nama_kepala_sekolah ?? '-' }}</div>
+                    <div class="text-sm text-slate-500">Kepala Sekolah</div>
+                </div>
+            </div>
+        </section>
+    @endif
+
     {{-- VISI MISI --}}
     <section data-fade-in class="mb-16 opacity-0 translate-y-8 transition duration-700">
         <h2 class="text-2xl font-bold text-blue-900 mb-4">Visi & Misi</h2>
@@ -61,26 +88,12 @@
         </div>
     </section>
 
-    {{-- SARANA PRASARANA --}}
+    {{-- TAUTAN FASILITAS (data sarana prasarana kini di halaman sendiri) --}}
     <section data-fade-in class="mb-16 opacity-0 translate-y-8 transition duration-700">
         <h2 class="text-2xl font-bold text-blue-900 mb-4">Sarana & Prasarana</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            @forelse($sarpras as $item)
-                <div class="bg-white border border-blue-100 rounded-2xl overflow-hidden shadow-sm">
-                    @if(!empty($item->foto))
-                        <img src="{{ Storage::url($item->foto) }}" alt="{{ $item->nama }}" class="w-full aspect-video object-cover">
-                    @else
-                        <div class="w-full aspect-video bg-blue-100"></div>
-                    @endif
-                    <div class="p-4">
-                        <div class="font-semibold text-blue-950">{{ $item->nama }}</div>
-                        <div class="text-sm text-slate-500 mt-1">{{ $item->deskripsi }}</div>
-                    </div>
-                </div>
-            @empty
-                <p class="text-slate-400 text-sm col-span-3">Belum ada data sarpras.</p>
-            @endforelse
-        </div>
+        <a href="{{ route('fasilitas') }}" class="text-blue-700 font-semibold hover:underline">
+            Lihat fasilitas sekolah &rarr;
+        </a>
     </section>
 
     {{-- AKREDITASI --}}
@@ -99,59 +112,56 @@
         @endif
     </section>
 
+    {{-- STRUKTUR ORGANISASI --}}
+    <section data-fade-in class="mb-16 opacity-0 translate-y-8 transition duration-700">
+        <h2 class="text-2xl font-bold text-blue-900 mb-8">Struktur Organisasi</h2>
 
-<section data-fade-in class="mb-16 opacity-0 translate-y-8 transition duration-700">
-    <h2 class="text-2xl font-bold text-blue-900 mb-8">Struktur Organisasi</h2>
+        {{-- Desktop: tree dengan garis penghubung --}}
+        <div class="hidden md:flex flex-col items-center">
+            @if($struktur->count() > 0)
+                <div class="bg-blue-900 text-white px-6 py-3 rounded-xl font-semibold shadow-sm">
+                    {{ $struktur->first()->jabatan }}
+                    <div class="text-xs font-normal text-blue-200 mt-0.5">{{ $struktur->first()->nama_pejabat }}</div>
+                </div>
 
-    {{-- Desktop: tree dengan garis penghubung --}}
-    <div class="hidden md:flex flex-col items-center">
-        @if($struktur->count() > 0)
-            {{-- Level 1: Kepala Sekolah (item pertama) --}}
-            <div class="bg-blue-900 text-white px-6 py-3 rounded-xl font-semibold shadow-sm">
-                {{ $struktur->first()->jabatan }}
-                <div class="text-xs font-normal text-blue-200 mt-0.5">{{ $struktur->first()->nama_pejabat }}</div>
-            </div>
+                @if($struktur->count() > 1)
+                    <div class="w-px h-8 bg-blue-200"></div>
 
-            @if($struktur->count() > 1)
-                {{-- Garis vertikal turun dari Kepsek --}}
-                <div class="w-px h-8 bg-blue-200"></div>
+                    <div class="relative flex justify-center w-full max-w-2xl">
+                        <div class="absolute top-0 h-px bg-blue-200" style="left: 12.5%; right: 12.5%;"></div>
 
-                {{-- Garis horizontal penghubung ke anak-anak --}}
-                <div class="relative flex justify-center w-full max-w-2xl">
-                    <div class="absolute top-0 h-px bg-blue-200" style="left: 12.5%; right: 12.5%;"></div>
-
-                    <div class="flex justify-between w-full gap-4 pt-8">
-                        @foreach($struktur->skip(1) as $s)
-                            <div class="flex flex-col items-center relative flex-1">
-                                <div class="absolute -top-8 w-px h-8 bg-blue-200"></div>
-                                <div class="bg-blue-100 text-blue-950 px-4 py-2 rounded-xl text-center">
-                                    <div class="font-medium text-sm">{{ $s->jabatan }}</div>
-                                    <div class="text-xs text-slate-500 mt-0.5">{{ $s->nama_pejabat }}</div>
+                        <div class="flex justify-between w-full gap-4 pt-8">
+                            @foreach($struktur->skip(1) as $s)
+                                <div class="flex flex-col items-center relative flex-1">
+                                    <div class="absolute -top-8 w-px h-8 bg-blue-200"></div>
+                                    <div class="bg-blue-100 text-blue-950 px-4 py-2 rounded-xl text-center">
+                                        <div class="font-medium text-sm">{{ $s->jabatan }}</div>
+                                        <div class="text-xs text-slate-500 mt-0.5">{{ $s->nama_pejabat }}</div>
+                                    </div>
                                 </div>
-                            </div>
-                        @endforeach
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+            @else
+                <p class="text-slate-400 text-sm">Belum ada data struktur organisasi.</p>
+            @endif
+        </div>
+
+        {{-- Mobile: accordion --}}
+        <div class="md:hidden space-y-2" x-data="{ open: null }">
+            @foreach($struktur as $i => $s)
+                <div class="border border-blue-100 rounded-xl overflow-hidden">
+                    <button @click="open = open === {{ $i }} ? null : {{ $i }}" class="w-full text-left px-4 py-3 font-medium text-blue-950 bg-blue-50">
+                        {{ $s->jabatan }}
+                    </button>
+                    <div x-show="open === {{ $i }}" class="px-4 py-3 text-sm text-slate-600">
+                        {{ $s->nama_pejabat }}
                     </div>
                 </div>
-            @endif
-        @else
-            <p class="text-slate-400 text-sm">Belum ada data struktur organisasi.</p>
-        @endif
-    </div>
-
-    {{-- Mobile: accordion (tetap seperti sebelumnya) --}}
-    <div class="md:hidden space-y-2" x-data="{ open: null }">
-        @foreach($struktur as $i => $s)
-            <div class="border border-blue-100 rounded-xl overflow-hidden">
-                <button @click="open = open === {{ $i }} ? null : {{ $i }}" class="w-full text-left px-4 py-3 font-medium text-blue-950 bg-blue-50">
-                    {{ $s->jabatan }}
-                </button>
-                <div x-show="open === {{ $i }}" class="px-4 py-3 text-sm text-slate-600">
-                    {{ $s->nama_pejabat }}
-                </div>
-            </div>
-        @endforeach
-    </div>
-</section>
+            @endforeach
+        </div>
+    </section>
 
     {{-- PROFIL YAYASAN --}}
     <section data-fade-in class="opacity-0 translate-y-8 transition duration-700">

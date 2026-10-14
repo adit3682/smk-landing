@@ -27,6 +27,10 @@ class ProfilSekolah extends Model
         'spmb_link',
         'spmb_whatsapp',
         'gmaps_embed',
+        'telepon', 
+        'email', 
+        'foto_kepala_sekolah', 
+        'sambutan_kepala_sekolah'
     ];
 
     protected $casts = [

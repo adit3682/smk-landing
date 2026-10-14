@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{ProfilSekolah, DataSiswaTahunan, Staf, Sarpras, Akreditasi, StrukturOrganisasi};
+use App\Models\{ProfilSekolah, DataSiswaTahunan, Staf, Akreditasi, StrukturOrganisasi};
 
 class ProfilSekolahController extends Controller
 {
@@ -12,7 +12,6 @@ class ProfilSekolahController extends Controller
             'profilSekolah' => ProfilSekolah::first(),
             'dataSiswa' => DataSiswaTahunan::orderBy('tahun_ajaran')->get(),
             'stafs' => Staf::all(),
-            'sarpras' => Sarpras::all(),
             'akreditasi' => Akreditasi::latest('tahun_berlaku')->first(),
             'struktur' => StrukturOrganisasi::orderBy('urutan')->get(),
         ]);

@@ -56,6 +56,27 @@ class ProfilSekolahResource extends Resource
                 ->maxLength(255)
                 ->default(null),
 
+            Forms\Components\TextInput::make('telepon')
+                ->tel()
+                ->placeholder('0281 1234567'),
+
+            Forms\Components\TextInput::make('email')
+                ->email()
+                ->placeholder('info@smkbintra.sch.id'),
+
+            Forms\Components\Section::make('Sambutan Kepala Sekolah')
+                ->schema([
+                    Forms\Components\FileUpload::make('foto_kepala_sekolah')
+                        ->image()
+                        ->directory('kepala-sekolah')
+                        ->imageEditor()
+                        ->saveUploadedFileUsing(\App\Support\ImageUpload::webp('kepala-sekolah')),
+
+                    Forms\Components\Textarea::make('sambutan_kepala_sekolah')
+                        ->rows(5)
+                        ->placeholder('Assalamu\'alaikum warahmatullahi wabarakatuh...'),
+                ]),
+
             Forms\Components\Textarea::make('visi')
                 ->columnSpanFull(),
 

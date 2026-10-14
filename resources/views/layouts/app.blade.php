@@ -20,6 +20,26 @@
 
 <body class="font-sans text-slate-800 bg-white antialiased">
 
+{{-- TOP BAR KONTAK --}}
+@if($navProfil?->telepon || $navProfil?->email)
+    <div class="bg-blue-950 text-blue-100 text-xs">
+        <div class="max-w-7xl mx-auto px-6 py-2 flex flex-wrap items-center justify-center sm:justify-between gap-2">
+            <div class="flex flex-wrap items-center gap-4">
+                @if($navProfil->telepon)
+                    <a href="tel:{{ preg_replace('/\s+/', '', $navProfil->telepon) }}" class="hover:text-white transition">
+                        {{ $navProfil->telepon }}
+                    </a>
+                @endif
+                @if($navProfil->email)
+                    <a href="mailto:{{ $navProfil->email }}" class="hover:text-white transition">
+                        {{ $navProfil->email }}
+                    </a>
+                @endif
+            </div>
+        </div>
+    </div>
+@endif
+
 {{-- Navbar pill mengambang, sesuai PRD 6.2 --}}
 <header class="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-4xl">
     <nav class="flex items-center justify-between gap-4 bg-white/70 backdrop-blur-md rounded-full px-6 py-3 shadow-lg">
@@ -37,7 +57,8 @@
             <a href="{{ route('profil-sekolah') }}" class="hover:text-blue-600">Profil Sekolah</a>
             <a href="{{ route('artikel.index') }}" class="hover:text-blue-600">Artikel</a>
             <a href="{{ route('transparansi') }}" class="hover:text-blue-600">Transparansi</a>
-            <a href="#kontak" class="hover:text-blue-600">Kontak</a>
+            <a href="{{ route('kontak') }}" class="hover:text-blue-600">Kontak</a>
+            <a href="{{ route('fasilitas') }}" class="hover:text-blue-300 transition">Fasilitas</a>
         </div>
 
         <a href="{{ route('spmb') }}" class="bg-blue-900 text-white text-sm font-semibold px-5 py-2 rounded-full hover:bg-blue-800 transition">
@@ -63,7 +84,7 @@
                 <a href="{{ route('profil-sekolah') }}" class="block text-sm font-medium hover:text-white transition">Profil Sekolah</a>
                 <a href="{{ route('artikel.index') }}" class="block text-sm font-medium hover:text-white transition">Artikel</a>
                 <a href="{{ route('transparansi') }}" class="block text-sm font-medium hover:text-white transition">Transparansi</a>
-                <a href="#kontak" class="block text-sm font-medium hover:text-white transition">Kontak</a>
+                <a href="{{ route('kontak') }}" class="block text-sm font-medium hover:text-white transition">Kontak</a>
                 <a href="{{ route('spmb') }}" class="block text-sm font-medium hover:text-white transition">SPMB</a> 
             </div>
 

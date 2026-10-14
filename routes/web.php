@@ -7,6 +7,8 @@ use App\Http\Controllers\ProfilSekolahController;
 use App\Http\Controllers\ArtikelController;
 use App\Http\Controllers\JurusanController;
 use App\Http\Controllers\TransparansiController;
+use App\Http\Controllers\FasilitasController;
+use App\Http\Controllers\KontakController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/profil-sekolah', [ProfilSekolahController::class, 'index'])->name('profil-sekolah');
@@ -15,3 +17,5 @@ Route::get('/artikel/{slug}', [ArtikelController::class, 'show'])->name('artikel
 Route::get('/jurusan/{slug}', [JurusanController::class, 'show'])->name('jurusan.show');
 Route::get('/transparansi', [TransparansiController::class, 'index'])->name('transparansi');
  Route::get('/spmb', [SpmbController::class, 'index'])->name('spmb');
+ Route::get('/fasilitas', [FasilitasController::class, 'index'])->name('fasilitas');
+ Route::get('/kontak', [KontakController::class, 'index'])->name('kontak');
