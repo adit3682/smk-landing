@@ -30,6 +30,10 @@ class JurusanResource extends Resource
                     ->columnSpanFull(),
                 Forms\Components\Textarea::make('kurikulum')
                     ->columnSpanFull(),
+                Forms\Components\Textarea::make('keterampilan')
+                    ->label('Keterampilan yang Dipelajari')
+                    ->helperText('Satu baris = satu keterampilan')
+                    ->columnSpanFull(),
                 Forms\Components\Textarea::make('prospek_kerja')
                     ->columnSpanFull(),
                  Forms\Components\FileUpload::make('icon') ->image() ->directory('jurusan') 
@@ -70,10 +74,10 @@ class JurusanResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\KegiatansRelationManager::class,
         ];
     }
-
+    
     public static function getPages(): array
     {
         return [
