@@ -1,0 +1,22 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        if (!Schema::hasColumn('profil_sekolah', 'struktur_yayasan')) {
+            Schema::table('profil_sekolah', function (Blueprint $table) {
+                $table->text('struktur_yayasan')->nullable();
+            });
+        }
+    }
+
+    public function down(): void
+    {
+        // Tidak menghapus kolom saat rollback.
+    }
+};

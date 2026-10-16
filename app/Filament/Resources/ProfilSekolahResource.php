@@ -109,6 +109,13 @@ class ProfilSekolahResource extends Resource
             Forms\Components\Textarea::make('profil_yayasan')
                 ->columnSpanFull(),
 
+            Forms\Components\Textarea::make('struktur_yayasan')
+                ->label('Struktur Yayasan')
+                ->rows(6)
+                ->columnSpanFull()
+                ->helperText('Satu baris = satu pengurus. Format: Nama | Jabatan. Urutan tampil sesuai urutan baris.')
+                ->placeholder("Drs. Haris Subyakto, SH.MH | Pembina Yayasan"),
+
             Forms\Components\TextInput::make('instagram')
                 ->url()
                 ->placeholder('https://instagram.com/namaakun'),

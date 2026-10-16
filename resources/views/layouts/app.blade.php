@@ -112,10 +112,14 @@
                 <a href="{{ route('spmb') }}" class="block text-sm font-medium hover:text-white transition">SPMB</a>
             </div>
 
-            {{-- LEGAL --}}
+                       {{-- PROGRAM KEAHLIAN --}}
+            @php
+                $footerJurusans = \App\Models\Jurusan::orderBy('nama')->get(['nama', 'slug']);
+            @endphp
             <div class="space-y-3">
-                <a href="#" class="block text-sm font-medium hover:text-white transition">Kebijakan Privasi</a>
-                <a href="#" class="block text-sm font-medium hover:text-white transition">Syarat &amp; Ketentuan</a>
+                @foreach($footerJurusans as $j)
+                    <a href="{{ route('jurusan.show', $j->slug) }}" class="block text-sm font-medium hover:text-white transition">{{ $j->nama }}</a>
+                @endforeach
             </div>
 
             {{-- IKUTI KAMI --}}
@@ -159,7 +163,7 @@
         {{-- SPONSOR & MITRA --}}
         @if(isset($sponsors) && $sponsors->count() > 0)
             <div class="border-t border-slate-800 mt-12 pt-8">
-                <p class="text-slate-500 text-xs uppercase tracking-wider text-center mb-6">Didukung Oleh</p>
+                <p class="text-slate-500 text-xs uppercase tracking-wider text-center mb-6">Mitra Kami</p>
                 <div class="flex flex-wrap items-center justify-center gap-x-10 gap-y-6">
                     @foreach($sponsors as $sponsor)
                         @if($sponsor->url)

@@ -63,8 +63,8 @@
                             {{ $jumlahJurusan ?? 0 }}
                         </div>
                         <div>
-                            <div class="text-sm font-bold text-brand-950">Program Keahlian</div>
-                            <div class="text-xs text-slate-500">Pilih sesuai minatmu</div>
+                            <div class="text-sm font-bold text-brand-950">Akreditasi Baik</div>
+                            <div class="text-xs text-slate-500">Siap bersaing global</div>
                         </div>
                     </div>
                 </div>
@@ -125,7 +125,55 @@
     </section>
 @endif
 
-{{-- Letakkan section MENGAPA MEMILIH KAMI yang sudah ada di sini, lalu lanjutkan dengan: --}}
+{{-- MENGAPA MEMILIH KAMI --}}
+<section id="mengapa-memilih" data-fade-in class="relative py-24 px-6 bg-slate-50 overflow-hidden opacity-0 translate-y-8 transition duration-700">
+    <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+
+        <div class="relative">
+            <div class="absolute -bottom-4 -left-4 w-full h-full rounded-3xl border-2 border-brand-200/70 -z-0"></div>
+            <div class="relative rounded-3xl overflow-hidden shadow-card aspect-[16/10] bg-brand-100">
+                @if($profilSekolah?->foto_mengapa_memilih)
+                    <img src="{{ Storage::url($profilSekolah->foto_mengapa_memilih) }}"
+                         alt="Mengapa memilih {{ $profilSekolah->nama_sekolah ?? 'sekolah kami' }}"
+                         loading="lazy" decoding="async"
+                         class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-brand-950/30 via-transparent to-transparent"></div>
+                @else
+                    <div class="w-full h-full bg-gradient-to-br from-brand-800 to-brand-600 flex items-center justify-center text-brand-100 text-sm">
+                        Foto belum diupload
+                    </div>
+                @endif
+            </div>
+        </div>
+
+        <div>
+            <p class="text-brand-600 font-semibold text-sm tracking-wide uppercase mb-2">Keunggulan Kami</p>
+            <h2 class="text-3xl md:text-4xl font-extrabold text-brand-950 tracking-tight leading-tight">
+                Mengapa Memilih<br>
+                <span class="text-brand-600">{{ $profilSekolah->nama_sekolah ?? 'SMK Kami' }}?</span>
+            </h2>
+
+            @if($profilSekolah?->mengapa_memilih_teks)
+                <p class="mt-6 text-slate-600 leading-8">
+                    {!! nl2br(e($profilSekolah->mengapa_memilih_teks)) !!}
+                </p>
+            @else
+                <p class="mt-6 text-slate-600 leading-8">
+                    <strong class="text-brand-950">{{ $profilSekolah->nama_sekolah ?? 'Sekolah kami' }}</strong>
+                    dikenal sebagai sekolah kejuruan yang berwawasan teknologi dalam mencetak lulusan
+                    yang <strong class="text-brand-950">kompeten, berkarakter, dan siap kerja</strong>,
+                    serta mampu bersaing di dunia usaha dan dunia industri.
+                </p>
+            @endif
+
+            <a href="{{ route('profil-sekolah') }}"
+               class="inline-flex items-center gap-2 mt-8 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold px-7 py-3.5 rounded-xl shadow-glow transition">
+                Selengkapnya <span aria-hidden="true">&rarr;</span>
+            </a>
+        </div>
+
+    </div>
+</section>
 
 {{-- TENTANG SEKOLAH + COUNTER --}}
 <section data-fade-in class="relative py-20 px-6 bg-brand-950 text-white overflow-hidden opacity-0 translate-y-8 transition duration-700">
@@ -148,13 +196,13 @@
 
         <div class="grid grid-cols-2 gap-5">
             @foreach([
-                [$siswaAktif ?? 0, 'Siswa Aktif'],
-                [$jumlahGuruStaf ?? 0, 'Guru & Staf'],
-                [$jumlahJurusan ?? 0, 'Jurusan'],
-                [$alumniPersen ?? 0, '% Alumni Terserap'],
-            ] as [$angka, $label])
+                [$siswaAktif ?? 0, 'Siswa Aktif', ''],
+                [$jumlahGuruStaf ?? 0, 'Guru & Staf', ''],
+                [$jumlahJurusan ?? 0, 'Jurusan', ''],
+                [$alumniPersen ?? 0, 'Alumni Terserap', '%'],
+            ] as [$angka, $label, $suffix])
                 <div class="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-sm">
-                    <div class="text-3xl font-extrabold text-white mb-1" data-counter data-target="{{ $angka }}">0</div>
+                    <div class="text-3xl font-extrabold text-white mb-1" data-counter data-target="{{ $angka }}" data-suffix="{{ $suffix }}">0</div>
                     <div class="text-sm text-brand-300">{{ $label }}</div>
                 </div>
             @endforeach
@@ -162,265 +210,276 @@
     </div>
 </section>
 
-    {{-- CAROUSEL GURU --}}
-    <section data-fade-in class="bg-blue-50 py-20 px-6 opacity-0 translate-y-8 transition duration-700 overflow-hidden">
-        <div class="max-w-6xl mx-auto">
-            <h2 class="text-3xl font-bold text-blue-950 text-center mb-12">Guru & Tenaga Pengajar</h2>
-            <div class="overflow-hidden">
-                <div id="carousel-guru" class="flex gap-6 w-max">
-                    @forelse($gurus as $guru)
-                        <div class="flex-shrink-0 w-48 bg-white rounded-2xl shadow-sm p-4 text-center">
-                            @if(!empty($guru->foto))
-                                <img src="{{ Storage::url($guru->foto) }}" alt="{{ $guru->nama }}" class="w-full aspect-square object-cover rounded-xl mb-3">
-                            @else
-                                <div class="w-full aspect-square bg-blue-100 rounded-xl mb-3 flex items-center justify-center text-blue-400 font-bold text-xl">
-                                    {{ substr($guru->nama, 0, 1) }}
-                                </div>
-                            @endif
-                            <div class="font-semibold text-blue-950 truncate">{{ $guru->nama }}</div>
-                            <div class="text-sm text-slate-500 truncate">{{ $guru->jabatan }}</div>
-                        </div>
-                    @empty
-                        <p class="text-slate-400 text-sm">Belum ada data guru.</p>
-                    @endforelse
-                </div>
+{{-- CAROUSEL GURU --}}
+<section data-fade-in class="bg-brand-50 py-24 px-6 opacity-0 translate-y-8 transition duration-700 overflow-hidden">
+    <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-12">
+            <p class="text-brand-600 font-semibold text-sm tracking-wide uppercase mb-2">Tim Pengajar</p>
+            <h2 class="text-3xl md:text-4xl font-extrabold text-brand-950 tracking-tight">Guru &amp; Tenaga Pengajar</h2>
+        </div>
+        <div class="overflow-hidden">
+            <div id="carousel-guru" class="flex gap-5 w-max">
+                @forelse($gurus as $guru)
+                    <div class="flex-shrink-0 w-48 bg-white rounded-2xl border border-slate-100 shadow-sm p-4 text-center">
+                        @if(!empty($guru->foto))
+                            <img src="{{ Storage::url($guru->foto) }}" alt="{{ $guru->nama }}"
+                                 loading="lazy" decoding="async" width="176" height="176"
+                                 class="w-full aspect-square object-cover rounded-xl mb-3">
+                        @else
+                            <div class="w-full aspect-square bg-brand-100 rounded-xl mb-3 flex items-center justify-center text-brand-400 font-bold text-xl">
+                                {{ substr($guru->nama, 0, 1) }}
+                            </div>
+                        @endif
+                        <div class="font-semibold text-brand-950 truncate">{{ $guru->nama }}</div>
+                        <div class="text-sm text-slate-500 truncate">{{ $guru->jabatan }}</div>
+                    </div>
+                @empty
+                    <p class="text-slate-400 text-sm">Belum ada data guru.</p>
+                @endforelse
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-        {{-- JURUSAN --}}
-    <section id="jurusan" data-fade-in class="py-20 px-6 bg-white opacity-0 translate-y-8 transition duration-700">
-        <div class="max-w-6xl mx-auto">
+{{-- JURUSAN --}}
+<section id="jurusan" data-fade-in class="py-24 px-6 bg-white opacity-0 translate-y-8 transition duration-700 scroll-mt-24">
+    <div class="max-w-6xl mx-auto">
 
-            <div class="text-center max-w-2xl mx-auto mb-14">
-                <span class="text-sm font-semibold text-blue-600 uppercase tracking-wide">Program Keahlian</span>
-                <h2 class="text-3xl font-bold text-blue-950 mt-2">Kompetensi Keahlian</h2>
-                <p class="text-slate-600 mt-3">
-                    Pilih jurusan sesuai minat dan bakatmu, dan siapkan diri untuk dunia kerja.
-                </p>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                @foreach($jurusans as $jurusan)
-                    <a href="{{ route('jurusan.show', $jurusan->slug) }}"
-                       class="group flex flex-col bg-white border border-blue-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300">
-
-                        <div class="relative aspect-square overflow-hidden bg-blue-50">
-                            @if($jurusan->icon)
-                                <img src="{{ Storage::url($jurusan->icon) }}"
-                                     alt="{{ $jurusan->nama }}"
-                                     loading="lazy"
-                                     class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
-                            @else
-                                <div class="w-full h-full bg-gradient-to-br from-blue-950 to-blue-800 flex items-center justify-center text-white font-extrabold text-6xl">
-                                    {{ strtoupper(substr($jurusan->nama, 0, 1)) }}
-                                </div>
-                            @endif
-                        </div>
-
-                        <div class="flex flex-col flex-1 p-6">
-                            <h3 class="font-bold text-lg text-blue-950">{{ $jurusan->nama }}</h3>
-                            <p class="text-sm text-slate-600 mt-2 leading-relaxed">
-                                {{ Str::limit($jurusan->deskripsi, 110) }}
-                            </p>
-                            <span class="mt-auto pt-5 inline-flex items-center gap-1 text-sm font-semibold text-blue-700 group-hover:gap-2 transition-all">
-                                Lihat Jurusan <span aria-hidden="true">&rarr;</span>
-                            </span>
-                        </div>
-                    </a>
-                @endforeach
-            </div>
-
+        <div class="text-center max-w-2xl mx-auto mb-14">
+            <p class="text-brand-600 font-semibold text-sm tracking-wide uppercase mb-2">Program Keahlian</p>
+            <h2 class="text-3xl md:text-4xl font-extrabold text-brand-950 tracking-tight">Kompetensi Keahlian</h2>
+            <p class="text-slate-600 mt-4">
+                Pilih jurusan sesuai minat dan bakatmu, dan siapkan diri untuk dunia kerja.
+            </p>
         </div>
-    </section>
 
-    {{-- GALERI --}}
-    <section data-fade-in class="bg-blue-50 py-20 px-6 opacity-0 translate-y-8 transition duration-700 overflow-hidden">
-        <div class="max-w-6xl mx-auto">
-            <h2 class="text-3xl font-bold text-blue-950 text-center mb-12">Galeri Kegiatan</h2>
-            <div class="overflow-hidden">
-                <div id="carousel-galeri" class="flex gap-6 w-max">
-                    @forelse($galeris as $galeri)
-                        <div class="flex-shrink-0 w-64">
-                            @if(!empty($galeri->foto))
-                                <img src="{{ Storage::url($galeri->foto) }}" alt="{{ $galeri->judul }}" class="w-full aspect-video object-cover rounded-xl mb-2">
-                            @else
-                                <div class="w-full aspect-video bg-blue-200 rounded-xl mb-2"></div>
-                            @endif
-                            <div class="text-sm font-medium text-blue-950 truncate">{{ $galeri->judul }}</div>
-                            <div class="text-xs text-slate-500">{{ $galeri->created_at->format('d M Y') }}</div>
-                        </div>
-                    @empty
-                        <p class="text-slate-400 text-sm">Belum ada galeri.</p>
-                    @endforelse
-                </div>
-            </div>
-        </div>
-    </section>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
+            @foreach($jurusans as $jurusan)
+                <a href="{{ route('jurusan.show', $jurusan->slug) }}"
+                   class="card-lift group flex flex-col bg-white border border-slate-100 rounded-2xl overflow-hidden shadow-sm">
 
-    {{-- BERITA & ACARA (carousel) --}}
-    @php
-        $beritaList = $artikels ?? collect();
-    @endphp
-
-    @if ($beritaList->count())
-    <section id="berita" class="py-16 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6">
-            <h2 class="text-center font-serif text-3xl sm:text-4xl font-bold text-amber-500 mb-10">
-                Berita &amp; Acara
-            </h2>
-
-            <div id="berita-carousel" class="relative">
-                <div id="berita-track"
-                     class="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-2"
-                     style="scrollbar-width: none; -ms-overflow-style: none;">
-                    @foreach ($beritaList as $a)
-                        @php
-                            $judul   = $a->judul ?? $a->title;
-                            $gambar  = $a->gambar ?? $a->thumbnail ?? $a->foto ?? null;
-                            $tanggal = $a->published_at ?? $a->created_at;
-                            $ringkas = \Illuminate\Support\Str::limit(
-                                strip_tags($a->ringkasan ?? $a->excerpt ?? $a->isi ?? $a->konten ?? ''), 140
-                            );
-                            $url     = route('artikel.show', $a->slug);
-                        @endphp
-
-                        <article class="berita-card snap-start shrink-0 w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]">
-                            <a href="{{ $url }}" class="block overflow-hidden bg-slate-100 aspect-[3/2]">
-                                @if ($gambar)
-                                    <img src="{{ asset('storage/' . $gambar) }}" alt="{{ $judul }}"
-                                         loading="lazy" class="w-full h-full object-cover">
-                                @else
-                                    <div class="w-full h-full flex items-center justify-center text-slate-400 text-sm">
-                                        Belum ada gambar
-                                    </div>
-                                @endif
-                            </a>
-
-                            <h3 class="mt-3 font-serif text-xl font-semibold text-slate-900 leading-snug line-clamp-3">
-                                <a href="{{ $url }}">{{ $judul }}</a>
-                            </h3>
-
-                            <p class="mt-3 text-sm text-sky-600">
-                                {{ \Carbon\Carbon::parse($tanggal)->locale('id')->translatedFormat('F j, Y') }}
-                            </p>
-
-                            <p class="mt-3 text-slate-600 text-sm leading-7 line-clamp-3">{{ $ringkas }}</p>
-
-                            <a href="{{ $url }}"
-                               class="inline-block mt-5 px-7 py-3 rounded bg-amber-500 hover:bg-amber-600 text-white text-sm font-medium transition">
-                                Selengkapnya
-                            </a>
-                        </article>
-                    @endforeach
-                </div>
-
-                <div id="berita-dots" class="flex justify-center gap-3 mt-8"></div>
-            </div>
-        </div>
-    </section>
-
-    <script>
-    (function () {
-        const track = document.getElementById('berita-track');
-        const dotsBox = document.getElementById('berita-dots');
-        if (!track || !dotsBox) return;
-
-        const cards = track.querySelectorAll('.berita-card');
-        let pages = 1, current = 0, timer;
-
-        const perView = () => window.innerWidth >= 1024 ? 3 : (window.innerWidth >= 768 ? 2 : 1);
-
-        function build() {
-            pages = Math.max(1, Math.ceil(cards.length / perView()));
-            dotsBox.innerHTML = '';
-            for (let i = 0; i < pages; i++) {
-                const b = document.createElement('button');
-                b.type = 'button';
-                b.setAttribute('aria-label', 'Halaman ' + (i + 1));
-                b.className = 'w-3 h-3 rounded-full transition';
-                b.addEventListener('click', () => { go(i); restart(); });
-                dotsBox.appendChild(b);
-            }
-            paint();
-        }
-
-        function paint() {
-            [...dotsBox.children].forEach((d, i) => {
-                d.style.background = i === current ? '#f59e0b' : '#1fa6b8';
-            });
-        }
-
-        function go(i) {
-            current = (i + pages) % pages;
-            const card = cards[Math.min(current * perView(), cards.length - 1)];
-            track.scrollTo({ left: card.offsetLeft - track.offsetLeft, behavior: 'smooth' });
-            paint();
-        }
-
-        let t;
-        track.addEventListener('scroll', () => {
-            clearTimeout(t);
-            t = setTimeout(() => {
-                const w = cards[0].offsetWidth + 24;
-                current = Math.min(pages - 1, Math.round(track.scrollLeft / (w * perView())));
-                paint();
-            }, 80);
-        });
-
-        function restart() { clearInterval(timer); timer = setInterval(() => go(current + 1), 5000); }
-
-        window.addEventListener('resize', () => { current = 0; build(); });
-        build();
-        restart();
-    })();
-    </script>
-    @endif
-
-    {{-- FASILITAS --}}
-    @if (isset($sarpras) && $sarpras->count())
-    <section id="fasilitas" data-fade-in class="py-16 px-4 sm:px-6 bg-white opacity-0 translate-y-8 transition duration-700">
-        <div class="max-w-6xl mx-auto">
-
-            <div class="text-center mb-10">
-                <h2 class="font-serif text-3xl sm:text-4xl font-bold text-amber-500">Fasilitas</h2>
-                <p class="mt-3 text-slate-600">
-                    <strong class="text-slate-900">{{ $profilSekolah->nama_sekolah ?? 'Sekolah kami' }}</strong>
-                    menyediakan fasilitas terbaik untuk mendukung kegiatan belajar mengajar.
-                </p>
-            </div>
-
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-2">
-                @foreach ($sarpras as $item)
-                    <a href="{{ route('fasilitas') }}"
-                       class="group relative block aspect-square overflow-hidden rounded-2xl bg-slate-200">
-                        @if (!empty($item->foto))
-                            <img src="{{ Storage::url($item->foto) }}" alt="{{ $item->nama }}" loading="lazy"
+                    <div class="relative aspect-square overflow-hidden bg-brand-50">
+                        @if($jurusan->icon)
+                            <img src="{{ Storage::url($jurusan->icon) }}" alt="{{ $jurusan->nama }}"
+                                 loading="lazy" decoding="async"
                                  class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
                         @else
-                            <div class="w-full h-full bg-blue-100"></div>
+                            <div class="w-full h-full bg-gradient-to-br from-brand-900 to-brand-700 flex items-center justify-center text-white font-extrabold text-6xl">
+                                {{ strtoupper(substr($jurusan->nama, 0, 1)) }}
+                            </div>
                         @endif
+                    </div>
 
-                        <div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition"></div>
+                    <div class="flex flex-col flex-1 p-6">
+                        <h3 class="font-bold text-lg text-brand-950">{{ $jurusan->nama }}</h3>
+                        <p class="text-sm text-slate-600 mt-2 leading-relaxed">
+                            {{ Str::limit($jurusan->deskripsi, 110) }}
+                        </p>
+                        <span class="mt-auto pt-5 inline-flex items-center gap-1 text-sm font-semibold text-brand-600 group-hover:gap-2 transition-all">
+                            Lihat Jurusan <span aria-hidden="true">&rarr;</span>
+                        </span>
+                    </div>
+                </a>
+            @endforeach
+        </div>
 
-                        <div class="absolute inset-x-0 bottom-0 p-4 text-white text-sm font-semibold
-                                    opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition">
-                            {{ $item->nama }}
+    </div>
+</section>
+
+{{-- GALERI --}}
+<section data-fade-in class="bg-slate-50 py-24 px-6 opacity-0 translate-y-8 transition duration-700 overflow-hidden">
+    <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-12">
+            <p class="text-brand-600 font-semibold text-sm tracking-wide uppercase mb-2">Dokumentasi</p>
+            <h2 class="text-3xl md:text-4xl font-extrabold text-brand-950 tracking-tight">Galeri Kegiatan</h2>
+        </div>
+        <div class="overflow-hidden">
+            <div id="carousel-galeri" class="flex gap-5 w-max">
+                @forelse($galeris as $galeri)
+                    <div class="flex-shrink-0 w-64">
+                        @if(!empty($galeri->foto))
+                            <img src="{{ Storage::url($galeri->foto) }}" alt="{{ $galeri->judul }}"
+                                 loading="lazy" decoding="async" width="256" height="144"
+                                 class="w-full aspect-video object-cover rounded-2xl mb-3 shadow-sm">
+                        @else
+                            <div class="w-full aspect-video bg-brand-100 rounded-2xl mb-3"></div>
+                        @endif
+                        <div class="text-sm font-semibold text-brand-950 truncate">{{ $galeri->judul }}</div>
+                        <div class="text-xs text-slate-500">{{ $galeri->created_at->format('d M Y') }}</div>
+                    </div>
+                @empty
+                    <p class="text-slate-400 text-sm">Belum ada galeri.</p>
+                @endforelse
+            </div>
+        </div>
+    </div>
+</section>
+
+{{-- BERITA & ACARA (carousel) --}}
+@php
+    $beritaList = $artikels ?? collect();
+@endphp
+
+@if ($beritaList->count())
+<section id="berita" class="py-24 px-6 bg-white">
+    <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-12">
+            <p class="text-brand-600 font-semibold text-sm tracking-wide uppercase mb-2">Kabar Terbaru</p>
+            <h2 class="text-3xl md:text-4xl font-extrabold text-brand-950 tracking-tight">Berita &amp; Acara</h2>
+        </div>
+
+        <div id="berita-carousel" class="relative">
+            <div id="berita-track"
+                 class="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-2"
+                 style="scrollbar-width: none; -ms-overflow-style: none;">
+                @foreach ($beritaList as $a)
+                    @php
+                        $judul   = $a->judul ?? $a->title;
+                        $gambar  = $a->gambar ?? $a->thumbnail ?? $a->foto ?? null;
+                        $tanggal = $a->published_at ?? $a->created_at;
+                        $ringkas = \Illuminate\Support\Str::limit(
+                            strip_tags($a->ringkasan ?? $a->excerpt ?? $a->isi ?? $a->konten ?? ''), 140
+                        );
+                        $url     = route('artikel.show', $a->slug);
+                    @endphp
+
+                    <article class="berita-card card-lift snap-start shrink-0 w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] bg-white border border-slate-100 rounded-2xl overflow-hidden shadow-sm flex flex-col">
+                        <a href="{{ $url }}" class="block overflow-hidden bg-brand-50 aspect-[3/2]">
+                            @if ($gambar)
+                                <img src="{{ asset('storage/' . $gambar) }}" alt="{{ $judul }}"
+                                     loading="lazy" decoding="async" class="w-full h-full object-cover">
+                            @else
+                                <div class="w-full h-full flex items-center justify-center text-slate-400 text-sm">
+                                    Belum ada gambar
+                                </div>
+                            @endif
+                        </a>
+
+                        <div class="flex flex-col flex-1 p-5">
+                            <p class="text-xs font-semibold text-brand-600">
+                                {{ \Carbon\Carbon::parse($tanggal)->locale('id')->translatedFormat('d F Y') }}
+                            </p>
+                            <h3 class="mt-2 text-lg font-bold text-brand-950 leading-snug line-clamp-2">
+                                <a href="{{ $url }}" class="hover:text-brand-600 transition">{{ $judul }}</a>
+                            </h3>
+                            <p class="mt-2 text-slate-600 text-sm leading-relaxed line-clamp-3">{{ $ringkas }}</p>
+                            <a href="{{ $url }}" class="mt-auto pt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand-600 hover:gap-2 transition-all">
+                                Selengkapnya <span aria-hidden="true">&rarr;</span>
+                            </a>
                         </div>
-                    </a>
+                    </article>
                 @endforeach
             </div>
 
-            <div class="text-center mt-10">
-                <a href="{{ route('fasilitas') }}"
-                   class="inline-block px-8 py-3 rounded-full bg-amber-500 hover:bg-amber-600 text-white text-sm font-medium transition">
-                    Lihat Semua Fasilitas
-                </a>
-            </div>
-
+            <div id="berita-dots" class="flex justify-center gap-2.5 mt-8"></div>
         </div>
-    </section>
-    @endif
+    </div>
+</section>
+
+<script>
+(function () {
+    const track = document.getElementById('berita-track');
+    const dotsBox = document.getElementById('berita-dots');
+    if (!track || !dotsBox) return;
+
+    const cards = track.querySelectorAll('.berita-card');
+    let pages = 1, current = 0, timer;
+
+    const perView = () => window.innerWidth >= 1024 ? 3 : (window.innerWidth >= 768 ? 2 : 1);
+
+    function build() {
+        pages = Math.max(1, Math.ceil(cards.length / perView()));
+        dotsBox.innerHTML = '';
+        for (let i = 0; i < pages; i++) {
+            const b = document.createElement('button');
+            b.type = 'button';
+            b.setAttribute('aria-label', 'Halaman ' + (i + 1));
+            b.className = 'h-2.5 rounded-full transition-all';
+            b.addEventListener('click', () => { go(i); restart(); });
+            dotsBox.appendChild(b);
+        }
+        paint();
+    }
+
+    function paint() {
+        [...dotsBox.children].forEach((d, i) => {
+            const aktif = i === current;
+            d.style.background = aktif ? '#1a5cf5' : '#bcddff';
+            d.style.width = aktif ? '1.75rem' : '0.625rem';
+        });
+    }
+
+    function go(i) {
+        current = (i + pages) % pages;
+        const card = cards[Math.min(current * perView(), cards.length - 1)];
+        track.scrollTo({ left: card.offsetLeft - track.offsetLeft, behavior: 'smooth' });
+        paint();
+    }
+
+    let t;
+    track.addEventListener('scroll', () => {
+        clearTimeout(t);
+        t = setTimeout(() => {
+            const w = cards[0].offsetWidth + 24;
+            current = Math.min(pages - 1, Math.round(track.scrollLeft / (w * perView())));
+            paint();
+        }, 80);
+    });
+
+    function restart() { clearInterval(timer); timer = setInterval(() => go(current + 1), 5000); }
+
+    window.addEventListener('resize', () => { current = 0; build(); });
+    build();
+    restart();
+})();
+</script>
+@endif
+
+{{-- FASILITAS --}}
+@if (isset($sarpras) && $sarpras->count())
+<section id="fasilitas" data-fade-in class="py-24 px-6 bg-slate-50 opacity-0 translate-y-8 transition duration-700 scroll-mt-24">
+    <div class="max-w-6xl mx-auto">
+
+        <div class="text-center max-w-2xl mx-auto mb-12">
+            <p class="text-brand-600 font-semibold text-sm tracking-wide uppercase mb-2">Sarana &amp; Prasarana</p>
+            <h2 class="text-3xl md:text-4xl font-extrabold text-brand-950 tracking-tight">Fasilitas</h2>
+            <p class="mt-4 text-slate-600">
+                <strong class="text-brand-950">{{ $profilSekolah->nama_sekolah ?? 'Sekolah kami' }}</strong>
+                menyediakan fasilitas terbaik untuk mendukung kegiatan belajar mengajar.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            @foreach ($sarpras as $item)
+                <a href="{{ route('fasilitas') }}"
+                   class="group relative block aspect-square overflow-hidden rounded-2xl bg-brand-100 shadow-sm">
+                    @if (!empty($item->foto))
+                        <img src="{{ Storage::url($item->foto) }}" alt="{{ $item->nama }}"
+                             loading="lazy" decoding="async"
+                             class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
+                    @else
+                        <div class="w-full h-full bg-brand-100"></div>
+                    @endif
+
+                    <div class="absolute inset-0 bg-gradient-to-t from-brand-950/80 via-brand-950/10 to-transparent opacity-80 group-hover:opacity-100 transition"></div>
+
+                    <div class="absolute inset-x-0 bottom-0 p-4 text-white text-sm font-semibold">
+                        {{ $item->nama }}
+                    </div>
+                </a>
+            @endforeach
+        </div>
+
+        <div class="text-center mt-10">
+            <a href="{{ route('fasilitas') }}"
+               class="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold px-8 py-3.5 rounded-xl shadow-glow transition">
+                Lihat Semua Fasilitas <span aria-hidden="true">&rarr;</span>
+            </a>
+        </div>
+
+    </div>
+</section>
+@endif
 
       <section data-fade-in class="py-20 px-6 opacity-0 translate-y-8 transition duration-700">
       <div class="max-w-5xl mx-auto relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-700 via-brand-800 to-brand-950 px-8 py-16 text-center text-white">
@@ -449,7 +508,7 @@
                                     current = target;
                                     clearInterval(interval);
                                 }
-                                el.textContent = current;
+                                el.textContent = current + (el.dataset.suffix || '');
                             }, 25);
                             observer.unobserve(entry.target);
                         }
