@@ -38,6 +38,7 @@ class ProfilSekolah extends Model
         'sambutan_kepala_sekolah',
         'foto_mengapa_memilih',
         'mengapa_memilih_teks',
+        'foto_background_hero',
     ];
     protected $casts = [
     'misi' => 'array',

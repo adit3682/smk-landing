@@ -31,8 +31,16 @@ class ProfilSekolahResource extends Resource
                 ->image()
                 ->directory('hero')
                 ->imageEditor()
-                ->label('Foto Background Hero')
+                ->label('Foto Siswa (sisi kanan hero)')
                 ->saveUploadedFileUsing(\App\Support\ImageUpload::webp('hero')),
+
+            Forms\Components\FileUpload::make('foto_background_hero')
+                ->image()
+                ->directory('hero-bg')
+                ->imageEditor()
+                ->label('Foto Background Hero (foto gedung sekolah)')
+                ->helperText('Gunakan foto landscape, lebar sekitar 1920 px.')
+                ->saveUploadedFileUsing(\App\Support\ImageUpload::webp('hero-bg', 85)),
 
             Forms\Components\FileUpload::make('logo')
                 ->image()

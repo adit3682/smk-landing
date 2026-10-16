@@ -9,11 +9,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('profil_sekolah', function (Blueprint $table) {
-            if (!Schema::hasColumn('profil_sekolah', 'foto_mengapa_memilih')) {
-                $table->string('foto_mengapa_memilih')->nullable();
-            }
-            if (!Schema::hasColumn('profil_sekolah', 'mengapa_memilih_teks')) {
-                $table->text('mengapa_memilih_teks')->nullable();
+            if (!Schema::hasColumn('profil_sekolah', 'foto_background_hero')) {
+                $table->string('foto_background_hero')->nullable();
             }
         });
     }
@@ -21,10 +18,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('profil_sekolah', function (Blueprint $table) {
-            foreach (['foto_mengapa_memilih', 'mengapa_memilih_teks'] as $col) {
-                if (Schema::hasColumn('profil_sekolah', $col)) {
-                    $table->dropColumn($col);
-                }
+            if (Schema::hasColumn('profil_sekolah', 'foto_background_hero')) {
+                $table->dropColumn('foto_background_hero');
             }
         });
     }

@@ -5,7 +5,18 @@
 @section('content')
 
     {{-- HERO --}}
-    <section id="hero-section" class="relative min-h-[90vh] flex items-center px-6 pt-28 pb-16 bg-gradient-to-br from-blue-950 via-blue-900 to-blue-800 text-white overflow-hidden">
+    <section id="hero-section" class="relative min-h-[90vh] flex items-center px-6 pt-28 pb-16 bg-blue-950 text-white overflow-hidden">
+
+        {{-- background foto sekolah --}}
+        @if($profilSekolah?->foto_background_hero)
+            <img src="{{ Storage::url($profilSekolah->foto_background_hero) }}"
+                 alt=""
+                 fetchpriority="high"
+                 class="absolute inset-0 w-full h-full object-cover">
+        @endif
+
+        {{-- overlay biru: lebih transparan kalau ada foto --}}
+        <div class="absolute inset-0 bg-gradient-to-br {{ $profilSekolah?->foto_background_hero ? 'from-blue-950/90 via-blue-900/75 to-blue-800/60' : 'from-blue-950 via-blue-900 to-blue-800' }}"></div>
 
         {{-- dekorasi titik-titik, murni visual --}}
         <div class="absolute -right-10 top-10 w-40 h-40 opacity-10" style="background-image: radial-gradient(circle, white 1.5px, transparent 1.5px); background-size: 16px 16px;"></div>
