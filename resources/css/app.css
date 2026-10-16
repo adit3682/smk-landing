@@ -1,3 +1,95 @@
 @import 'tailwindcss';
-@theme { --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif; } 
 
+@theme {
+    --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+
+    --color-brand-50: #eef6ff;
+    --color-brand-100: #d9ebff;
+    --color-brand-200: #bcddff;
+    --color-brand-300: #8ec7ff;
+    --color-brand-400: #59a6ff;
+    --color-brand-500: #3380ff;
+    --color-brand-600: #1a5cf5;
+    --color-brand-700: #1447e1;
+    --color-brand-800: #173ab6;
+    --color-brand-900: #19358f;
+    --color-brand-950: #142257;
+
+    --shadow-glow: 0 0 40px -10px rgb(51 128 255 / 0.45);
+    --shadow-card: 0 25px 50px -12px rgb(20 34 87 / 0.12);
+}
+
+html { scroll-behavior: smooth; }
+
+.grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    opacity: 0.4;
+}
+
+.glass {
+    background: rgb(255 255 255 / 0.72);
+    backdrop-filter: blur(16px);
+}
+
+.nav-glass {
+    background: rgb(255 255 255 / 0.8);
+    backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgb(255 255 255 / 0.6);
+}
+
+.text-gradient {
+    background: linear-gradient(135deg, #ffffff 0%, #bcddff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+}
+.float { animation: float 6s ease-in-out infinite; }
+
+.card-lift {
+    transition: transform .35s cubic-bezier(.22, 1, .36, 1), box-shadow .35s cubic-bezier(.22, 1, .36, 1);
+}
+.card-lift:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 32px 64px -16px rgb(20 34 87 / 0.18);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .float { animation: none; }
+    html { scroll-behavior: auto; }
+}
+/* Warna aksen per jurusan: dipilih lewat atribut data-tema di halaman jurusan */
+:root {
+  --accent-50: #eef6ff;  --accent-100: #d9ebff; --accent-200: #bcddff;
+  --accent-300: #8ec7ff; --accent-400: #59a6ff; --accent-500: #3380ff;
+  --accent-600: #1a5cf5; --accent-700: #1447e1; --accent-800: #173ab6;
+  --accent-900: #19358f; --accent-950: #142257;
+}
+[data-tema="violet"] {
+  --accent-50: #f5f3ff;  --accent-100: #ede9fe; --accent-200: #ddd6fe;
+  --accent-300: #c4b5fd; --accent-400: #a78bfa; --accent-500: #8b5cf6;
+  --accent-600: #7c3aed; --accent-700: #6d28d9; --accent-800: #5b21b6;
+  --accent-900: #4c1d95; --accent-950: #2e1065;
+}
+[data-tema="orange"] {
+  --accent-50: #fff7ed;  --accent-100: #ffedd5; --accent-200: #fed7aa;
+  --accent-300: #fdba74; --accent-400: #fb923c; --accent-500: #f97316;
+  --accent-600: #ea580c; --accent-700: #c2410c; --accent-800: #9a3412;
+  --accent-900: #7c2d12; --accent-950: #431407;
+}
+@theme inline {
+  --color-accent-50: var(--accent-50);   --color-accent-100: var(--accent-100);
+  --color-accent-200: var(--accent-200); --color-accent-300: var(--accent-300);
+  --color-accent-400: var(--accent-400); --color-accent-500: var(--accent-500);
+  --color-accent-600: var(--accent-600); --color-accent-700: var(--accent-700);
+  --color-accent-800: var(--accent-800); --color-accent-900: var(--accent-900);
+  --color-accent-950: var(--accent-950);
+}

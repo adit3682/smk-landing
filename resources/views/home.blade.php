@@ -4,162 +4,163 @@
 
 @section('content')
 
-    {{-- HERO --}}
-    <section id="hero-section" class="relative min-h-[90vh] flex items-center px-6 pt-28 pb-16 bg-blue-950 text-white overflow-hidden">
 
-        {{-- background foto sekolah --}}
-        @if($profilSekolah?->foto_background_hero)
-            <img src="{{ Storage::url($profilSekolah->foto_background_hero) }}"
-                 alt=""
-                 fetchpriority="high"
-                 class="absolute inset-0 w-full h-full object-cover">
-        @endif
+{{-- HERO --}}
+<section id="hero-section" class="relative min-h-[100svh] flex items-center px-6 pt-32 pb-20 text-white overflow-hidden grain">
 
-        {{-- overlay biru: lebih transparan kalau ada foto --}}
-        <div class="absolute inset-0 bg-gradient-to-br {{ $profilSekolah?->foto_background_hero ? 'from-blue-950/90 via-blue-900/75 to-blue-800/60' : 'from-blue-950 via-blue-900 to-blue-800' }}"></div>
+    @if($profilSekolah?->foto_background_hero)
+        <img src="{{ Storage::url($profilSekolah->foto_background_hero) }}" alt="" fetchpriority="high"
+             class="absolute inset-0 w-full h-full object-cover">
+    @endif
 
-        {{-- dekorasi titik-titik, murni visual --}}
-        <div class="absolute -right-10 top-10 w-40 h-40 opacity-10" style="background-image: radial-gradient(circle, white 1.5px, transparent 1.5px); background-size: 16px 16px;"></div>
+    <div class="absolute inset-0 bg-gradient-to-br {{ $profilSekolah?->foto_background_hero ? 'from-brand-950/90 via-brand-900/80 to-brand-800/70' : 'from-brand-950 via-brand-900 to-brand-800' }}"></div>
+    <div class="absolute inset-0 opacity-30" style="background-image: radial-gradient(circle at 70% 30%, rgba(89,166,255,.35) 0%, transparent 55%), radial-gradient(circle at 20% 80%, rgba(51,128,255,.2) 0%, transparent 50%);"></div>
+    <div class="absolute inset-0 opacity-[0.07]" style="background-image: linear-gradient(rgba(255,255,255,.15) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.15) 1px, transparent 1px); background-size: 48px 48px;"></div>
 
-        <div class="relative z-10 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center w-full">
+    <div class="relative z-10 max-w-7xl mx-auto px-0 sm:px-2 w-full grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
 
-            {{-- Kiri: headline --}}
-            <div class="text-center lg:text-left">
-                <h1 class="text-4xl md:text-5xl font-extrabold leading-tight mb-5">
-                    Mencetak Talenta Digital<br>
-                    Masa Depan Indonesia
-                </h1>
-                <p class="text-blue-200 text-lg mb-8 max-w-md mx-auto lg:mx-0">
-                    {{ $profilSekolah->nama_sekolah ?? 'SMK TI Bina Citra Informatika Purwokerto' }} — modern, profesional, dan siap kerja.
-                </p>
-                <a href="{{ route('spmb') }}" class="inline-block bg-white text-blue-900 font-semibold px-8 py-3 rounded-full hover:bg-blue-100 transition">
-                    SPMB
+        <div class="text-center lg:text-left">
+            <h1 class="text-4xl sm:text-5xl lg:text-[3.4rem] font-extrabold leading-[1.12] tracking-tight mb-5">
+                Mencetak Talenta<br>
+                <span class="text-gradient">Digital Masa Depan</span><br>
+                Indonesia
+            </h1>
+            <p class="text-brand-200/90 text-lg max-w-md mx-auto lg:mx-0 mb-9 leading-relaxed">
+                {{ $profilSekolah->nama_sekolah ?? 'SMK TI Bina Citra Informatika Purwokerto' }} — modern, profesional, dan siap kerja di era digital.
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center gap-3 justify-center lg:justify-start">
+                <a href="{{ route('spmb') }}"
+                   class="inline-flex items-center gap-2 bg-white text-brand-900 font-semibold px-7 py-3.5 rounded-xl shadow-glow hover:shadow-xl hover:scale-[1.02] transition-all duration-300">
+                    Daftar SPMB <span aria-hidden="true">&rarr;</span>
+                </a>
+                <a href="#jurusan"
+                   class="inline-flex items-center gap-2 text-white/90 font-medium px-6 py-3.5 rounded-xl border border-white/20 hover:bg-white/10 transition">
+                    Lihat Jurusan
                 </a>
             </div>
-
-            {{-- Kanan: foto --}}
-            <div class="flex justify-center lg:justify-end">
-                @if($profilSekolah?->foto_hero)
-                    <img src="{{ Storage::url($profilSekolah->foto_hero) }}"
-                         alt="{{ $profilSekolah->nama_sekolah }}"
-                         class="w-full max-w-md rounded-3xl shadow-2xl object-cover aspect-[4/5]">
-                @else
-                    <div class="w-full max-w-md aspect-[4/5] rounded-3xl bg-blue-800/60 border border-blue-700 flex items-center justify-center text-blue-300 text-sm">
-                        Foto hero belum diupload
-                    </div>
-                @endif
-            </div>
-
         </div>
-    </section>
 
-    {{-- SAMBUTAN KEPALA SEKOLAH --}}
-    @if($profilSekolah?->sambutan_kepala_sekolah)
-        <section data-fade-in class="py-20 px-6 opacity-0 translate-y-8 transition duration-700">
-            <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 items-center">
+        <div class="relative flex justify-center lg:justify-end">
+            <div class="relative w-full max-w-[420px]">
+                <div class="absolute -inset-6 bg-brand-500/30 blur-3xl rounded-full"></div>
 
-                <div class="md:col-span-1 flex justify-center">
-                    @if($profilSekolah->foto_kepala_sekolah)
-                        <img src="{{ Storage::url($profilSekolah->foto_kepala_sekolah) }}"
-                             alt="{{ $profilSekolah->nama_kepala_sekolah }}"
-                             class="w-48 h-48 rounded-full object-cover shadow-md">
+                <div class="relative float rounded-3xl overflow-hidden shadow-2xl border border-white/10">
+                    @if($profilSekolah?->foto_hero)
+                        <img src="{{ Storage::url($profilSekolah->foto_hero) }}" alt="{{ $profilSekolah->nama_sekolah }}"
+                             class="w-full aspect-[4/5] object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-brand-950/60 via-transparent to-transparent"></div>
                     @else
-                        <div class="w-48 h-48 rounded-full bg-blue-100 flex items-center justify-center text-blue-400 font-bold text-4xl">
-                            {{ substr($profilSekolah->nama_kepala_sekolah ?? 'K', 0, 1) }}
+                        <div class="w-full aspect-[4/5] bg-brand-800/60 flex items-center justify-center text-brand-300 text-sm">
+                            Foto hero belum diupload
                         </div>
                     @endif
                 </div>
 
-                <div class="md:col-span-2 text-center md:text-left">
-                    <span class="text-sm font-semibold text-blue-600 uppercase tracking-wide">Sambutan Kepala Sekolah</span>
-                    <p class="text-slate-600 italic leading-relaxed mt-4 mb-5">
-                        "{{ $profilSekolah->sambutan_kepala_sekolah }}"
-                    </p>
-                    <div class="font-bold text-blue-950">{{ $profilSekolah->nama_kepala_sekolah ?? '-' }}</div>
-                    <div class="text-sm text-slate-500">Kepala Sekolah</div>
-                </div>
-
-            </div>
-        </section>
-    @endif
-
-        {{-- MENGAPA MEMILIH KAMI --}}
-    <section id="mengapa-memilih" data-fade-in class="py-16 px-4 sm:px-6 bg-white opacity-0 translate-y-8 transition duration-700">
-        <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-
-            <div>
-                @if($profilSekolah?->foto_mengapa_memilih)
-                    <img src="{{ Storage::url($profilSekolah->foto_mengapa_memilih) }}"
-                         alt="Mengapa memilih {{ $profilSekolah->nama_sekolah ?? 'sekolah kami' }}"
-                         loading="lazy"
-                         class="w-full aspect-[16/9] object-cover shadow-md">
-                @else
-                    <div class="w-full aspect-[16/9] bg-blue-100 flex items-center justify-center text-blue-400 text-sm">
-                        Foto belum diupload
+                <div class="absolute -bottom-4 -left-2 sm:bottom-6 sm:-left-8 glass rounded-2xl px-4 py-3 shadow-card border border-white/40">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-brand-600 flex items-center justify-center text-white font-bold">
+                            {{ $jumlahJurusan ?? 0 }}
+                        </div>
+                        <div>
+                            <div class="text-sm font-bold text-brand-950">Program Keahlian</div>
+                            <div class="text-xs text-slate-500">Pilih sesuai minatmu</div>
+                        </div>
                     </div>
-                @endif
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+{{-- SAMBUTAN KEPALA SEKOLAH --}}
+@if($profilSekolah?->sambutan_kepala_sekolah)
+    <section data-fade-in class="relative py-24 px-6 bg-white overflow-hidden opacity-0 translate-y-8 transition duration-700">
+        <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-brand-50/80 to-transparent pointer-events-none"></div>
+
+        <div class="relative max-w-6xl mx-auto grid lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+
+            <div class="lg:col-span-5 order-2 lg:order-1">
+                <div class="relative max-w-sm mx-auto lg:mx-0">
+                    <div class="absolute -bottom-4 -right-4 w-full h-full rounded-2xl border-2 border-brand-200/60 -z-10"></div>
+                    <div class="relative rounded-2xl overflow-hidden shadow-card aspect-[3/4] bg-brand-100">
+                        @if($profilSekolah->foto_kepala_sekolah)
+                            <img src="{{ Storage::url($profilSekolah->foto_kepala_sekolah) }}"
+                                 alt="{{ $profilSekolah->nama_kepala_sekolah }}"
+                                 class="w-full h-full object-cover object-top">
+                        @else
+                            <div class="w-full h-full flex items-center justify-center text-brand-400 font-bold text-6xl">
+                                {{ strtoupper(substr($profilSekolah->nama_kepala_sekolah ?? 'K', 0, 1)) }}
+                            </div>
+                        @endif
+                        <div class="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-brand-950/70 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 right-0 p-5 text-white">
+                            <div class="font-bold text-lg leading-tight">{{ $profilSekolah->nama_kepala_sekolah ?? '-' }}</div>
+                            <div class="text-sm text-brand-100/90 mt-0.5">Kepala Sekolah</div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="text-center lg:text-left">
-                <h2 class="font-serif text-3xl sm:text-4xl font-bold leading-tight">
-                    <span class="text-amber-500">Mengapa memilih</span><br>
-                    <span class="text-slate-900">{{ $profilSekolah->nama_sekolah ?? 'SMK Kami' }} ?</span>
-                </h2>
-
-                @if($profilSekolah?->mengapa_memilih_teks)
-                    <p class="mt-5 text-slate-600 leading-8 text-justify">
-                        {!! nl2br(e($profilSekolah->mengapa_memilih_teks)) !!}
+            <div class="lg:col-span-7 order-1 lg:order-2">
+                <div class="inline-flex items-center gap-2 text-brand-600 font-semibold text-xs tracking-widest uppercase mb-5">
+                    <span class="w-8 h-px bg-brand-400"></span>
+                    Sambutan Kepala Sekolah
+                </div>
+                <div class="relative">
+                    <span class="absolute -top-4 -left-2 text-7xl font-serif text-brand-100 leading-none select-none" aria-hidden="true">&ldquo;</span>
+                    <p class="relative text-slate-600 text-base md:text-lg leading-relaxed pl-4 md:pl-6 border-l-2 border-brand-200">
+                        {!! nl2br(e($profilSekolah->sambutan_kepala_sekolah)) !!}
                     </p>
-                @else
-                    <p class="mt-5 text-slate-600 leading-8 text-justify">
-                        <strong class="text-slate-900">{{ $profilSekolah->nama_sekolah ?? 'Sekolah kami' }}</strong>
-                        dikenal sebagai sekolah kejuruan yang berwawasan teknologi dalam mencetak lulusan
-                        yang <strong class="text-slate-900">kompeten, berkarakter, dan siap kerja</strong>,
-                        serta mampu bersaing di dunia usaha dan dunia industri.
-                    </p>
-                @endif
-
-                <a href="{{ route('profil-sekolah') }}"
-                   class="inline-block mt-8 px-8 py-3 rounded-full bg-amber-500 hover:bg-amber-600 text-white text-sm font-medium transition">
-                    Selengkapnya
-                </a>
+                </div>
+                <div class="mt-8 text-sm text-slate-500">
+                    <span class="font-semibold text-brand-950">{{ $profilSekolah->nama_kepala_sekolah ?? '-' }}</span>
+                    <span class="mx-1.5 text-slate-300">&middot;</span>
+                    Kepala Sekolah
+                </div>
             </div>
 
         </div>
     </section>
+@endif
 
-    {{-- PROFIL SINGKAT + COUNTER --}}
-    <section class="relative z-10 bg-white rounded-t-[2.5rem] -mt-10 pt-20 pb-20 px-6">
-        <div data-fade-in class="max-w-5xl mx-auto text-center opacity-0 translate-y-8 transition duration-700">
-            <h2 class="text-3xl font-bold text-blue-950 mb-4">Tentang Sekolah Kami</h2>
-            <p class="text-slate-600 max-w-2xl mx-auto mb-12">
-                {{ $profilSekolah->visi ?? 'Sambutan kepala sekolah dan sejarah singkat akan tampil di sini.' }}
-            </p>
+{{-- Letakkan section MENGAPA MEMILIH KAMI yang sudah ada di sini, lalu lanjutkan dengan: --}}
 
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                <div>
-                    <div class="text-4xl font-extrabold text-blue-900" data-counter data-target="{{ $siswaAktif ?? 0 }}">0</div>
-                    <div class="text-sm text-slate-500 mt-1">Siswa Aktif</div>
-                </div>
-                <div>
-                    <div class="text-4xl font-extrabold text-blue-900" data-counter data-target="{{ $jumlahGuruStaf ?? 0 }}">0</div>
-                    <div class="text-sm text-slate-500 mt-1">Guru & Staf</div>
-                </div>
-                <div>
-                    <div class="text-4xl font-extrabold text-blue-900" data-counter data-target="{{ $jumlahJurusan ?? 0 }}">0</div>
-                    <div class="text-sm text-slate-500 mt-1">Jurusan</div>
-                </div>
-                <div>
-                    <div class="text-4xl font-extrabold text-blue-900" data-counter data-target="{{ $alumniPersen ?? 0 }}">0</div>
-                    <div class="text-sm text-slate-500 mt-1">% Alumni Terserap</div>
-                </div>
-            </div>
+{{-- TENTANG SEKOLAH + COUNTER --}}
+<section data-fade-in class="relative py-20 px-6 bg-brand-950 text-white overflow-hidden opacity-0 translate-y-8 transition duration-700">
+    <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 80% 20%, #3380ff 0%, transparent 40%);"></div>
 
-            <a href="{{ route('profil-sekolah') }}" class="inline-block mt-10 text-blue-700 font-semibold hover:underline">
-                Lihat Profil Lengkap &rarr;
+    <div class="relative max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+        <div>
+            <p class="text-brand-300 font-semibold text-sm tracking-wide uppercase mb-3">Tentang Sekolah</p>
+            <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-5">
+                {{ $profilSekolah->nama_sekolah ?? 'Tentang Sekolah Kami' }}
+            </h2>
+            @if($profilSekolah?->visi)
+                <p class="text-brand-200/80 leading-relaxed mb-8">{{ $profilSekolah->visi }}</p>
+            @endif
+            <a href="{{ route('profil-sekolah') }}"
+               class="inline-flex items-center gap-2 text-sm font-semibold text-white border-b border-white/40 pb-0.5 hover:border-white transition">
+                Lihat profil lengkap <span aria-hidden="true">&rarr;</span>
             </a>
         </div>
-    </section>
+
+        <div class="grid grid-cols-2 gap-5">
+            @foreach([
+                [$siswaAktif ?? 0, 'Siswa Aktif'],
+                [$jumlahGuruStaf ?? 0, 'Guru & Staf'],
+                [$jumlahJurusan ?? 0, 'Jurusan'],
+                [$alumniPersen ?? 0, '% Alumni Terserap'],
+            ] as [$angka, $label])
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-sm">
+                    <div class="text-3xl font-extrabold text-white mb-1" data-counter data-target="{{ $angka }}">0</div>
+                    <div class="text-sm text-brand-300">{{ $label }}</div>
+                </div>
+            @endforeach
+        </div>
+    </div>
+</section>
 
     {{-- CAROUSEL GURU --}}
     <section data-fade-in class="bg-blue-50 py-20 px-6 opacity-0 translate-y-8 transition duration-700 overflow-hidden">
@@ -421,34 +422,17 @@
     </section>
     @endif
 
-    {{-- KONTAK / LOKASI --}}
-    <section id="kontak" data-fade-in class="bg-blue-950 text-white py-20 px-6 opacity-0 translate-y-8 transition duration-700">
-        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
-
-            <div>
-                <p class="text-blue-300 text-xs uppercase tracking-wider mb-3">Alamat</p>
-                <p class="text-xl md:text-2xl font-semibold leading-relaxed">
-                    {!! nl2br(e($profilSekolah->alamat ?? 'Alamat sekolah akan tampil di sini.')) !!}
-                </p>
-            </div>
-
-            <div>
-                @if($profilSekolah?->gmaps_embed_url)
-                    <iframe src="{{ $profilSekolah->gmaps_embed_url }}"
-                            class="w-full h-80 rounded-2xl border-0"
-                            allowfullscreen
-                            loading="lazy"
-                            referrerpolicy="no-referrer-when-downgrade"
-                            title="Lokasi sekolah di Google Maps"></iframe>
-                @else
-                    <div class="w-full h-80 rounded-2xl bg-blue-900/50 flex items-center justify-center text-blue-300 text-sm">
-                        Peta belum tersedia
-                    </div>
-                @endif
-            </div>
-
-        </div>
-    </section>
+      <section data-fade-in class="py-20 px-6 opacity-0 translate-y-8 transition duration-700">
+      <div class="max-w-5xl mx-auto relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-700 via-brand-800 to-brand-950 px-8 py-16 text-center text-white">
+          <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-4">Siap Menjadi Talenta Digital?</h2>
+          <p class="text-brand-200 max-w-lg mx-auto mb-8">
+              Bergabunglah dengan {{ $profilSekolah->nama_sekolah ?? 'sekolah kami' }} dan wujudkan masa depan digitalmu.
+          </p>
+          <a href="{{ route('spmb') }}" class="inline-flex items-center gap-2 bg-white text-brand-900 font-bold px-8 py-4 rounded-xl shadow-lg hover:scale-[1.03] transition-transform">
+              Daftar SPMB Sekarang <span aria-hidden="true">&rarr;</span>
+          </a>
+      </div>
+  </section>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {

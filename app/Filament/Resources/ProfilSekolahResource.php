@@ -168,6 +168,25 @@ class ProfilSekolahResource extends Resource
                         ->helperText('Satu baris = satu ekskul')
                         ->rows(8)
                         ->placeholder("E-sport\nHadroh\nFutsal\nEngineering\nSoftware Engineering\nTari\nMusik\nVolly\nPMR\nPramuka"),
+
+                    Forms\Components\Textarea::make('ekstrakurikuler')
+                        ->label('Ekstrakurikuler')
+                        ->helperText('Satu baris = satu ekskul')
+                        ->rows(8)
+                        ->placeholder("E-sport\nHadroh\nFutsal\nEngineering\nSoftware Engineering\nTari\nMusik\nVolly\nPMR\nPramuka"),
+
+                        
+                    Forms\Components\Textarea::make('spmb_gelombang')
+                        ->label('Gelombang Pendaftaran')
+                        ->rows(4)
+                        ->helperText('Satu gelombang per baris. Format: Judul | Periode | Keterangan.')
+                        ->placeholder("Gelombang 1 | Sep 2026 - Jan 2027 | Kuota terbatas"),
+
+                    Forms\Components\Textarea::make('spmb_prestasi')
+                        ->label('Prestasi Siswa')
+                        ->rows(6)
+                        ->helperText('Satu prestasi per baris.'),
+
                 ]),
 
                  // GOOGLE MAPS
