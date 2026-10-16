@@ -187,20 +187,49 @@
         </div>
     </section>
 
-    {{-- JURUSAN --}}
-    <section data-fade-in class="py-20 px-6 opacity-0 translate-y-8 transition duration-700">
+        {{-- JURUSAN --}}
+    <section id="jurusan" data-fade-in class="py-20 px-6 bg-white opacity-0 translate-y-8 transition duration-700">
         <div class="max-w-6xl mx-auto">
-            <h2 class="text-3xl font-bold text-blue-950 text-center mb-12">Kompetensi Keahlian</h2>
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+
+            <div class="text-center max-w-2xl mx-auto mb-14">
+                <span class="text-sm font-semibold text-blue-600 uppercase tracking-wide">Program Keahlian</span>
+                <h2 class="text-3xl font-bold text-blue-950 mt-2">Kompetensi Keahlian</h2>
+                <p class="text-slate-600 mt-3">
+                    Pilih jurusan sesuai minat dan bakatmu, dan siapkan diri untuk dunia kerja.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                 @foreach($jurusans as $jurusan)
-                    <a href="{{ route('jurusan.show', $jurusan->slug) }}" class="block bg-white border border-blue-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition">
-                        <div class="w-20 h-20 rounded-lg mb-5 overflow-hidden {{ $jurusan->icon ? '' : 'bg-blue-900 flex items-center justify-center' }}"> @if($jurusan->icon)
-                        <img src="{{ Storage::url($jurusan->icon) }}" alt="{{ $jurusan->nama }}" class="w-full h-full object-contain"> @endif </div>
-                        <div class="font-semibold text-blue-950">{{ $jurusan->nama }}</div>
-                        <p class="text-sm text-slate-500 mt-2">{{ Str::limit($jurusan->deskripsi, 70) }}</p>
+                    <a href="{{ route('jurusan.show', $jurusan->slug) }}"
+                       class="group flex flex-col bg-white border border-blue-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300">
+
+                        <div class="relative aspect-square overflow-hidden bg-blue-50">
+                            @if($jurusan->icon)
+                                <img src="{{ Storage::url($jurusan->icon) }}"
+                                     alt="{{ $jurusan->nama }}"
+                                     loading="lazy"
+                                     class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
+                            @else
+                                <div class="w-full h-full bg-gradient-to-br from-blue-950 to-blue-800 flex items-center justify-center text-white font-extrabold text-6xl">
+                                    {{ strtoupper(substr($jurusan->nama, 0, 1)) }}
+                                </div>
+                            @endif
+                        </div>
+
+                        <div class="flex flex-col flex-1 p-6">
+                            <h3 class="font-bold text-lg text-blue-950">{{ $jurusan->nama }}</h3>
+                            <p class="text-sm text-slate-600 mt-2 leading-relaxed">
+                                {{ Str::limit($jurusan->deskripsi, 110) }}
+                            </p>
+                            <span class="mt-auto pt-5 inline-flex items-center gap-1 text-sm font-semibold text-blue-700 group-hover:gap-2 transition-all">
+                                Lihat Jurusan <span aria-hidden="true">&rarr;</span>
+                            </span>
+                        </div>
                     </a>
                 @endforeach
             </div>
+
         </div>
     </section>
 
