@@ -120,6 +120,31 @@ class ProfilSekolahResource extends Resource
                         ->helperText(
                             'Tulis angka saja, tanpa spasi atau tanda hubung.'
                         ),
+
+                        Forms\Components\TextInput::make('spmb_tahun_ajaran')
+                        ->label('Tahun Ajaran')
+                        ->placeholder('2027/2028'),
+
+                    Forms\Components\TextInput::make('spmb_biaya')
+                        ->label('Biaya Pendaftaran')
+                        ->placeholder('GRATIS'),
+
+                    Forms\Components\Textarea::make('spmb_promo')
+                        ->label('Promo / Penawaran Khusus')
+                        ->placeholder('Dapatkan Spesial Gift untuk 10 Pendaftar Pertama')
+                        ->rows(2),
+
+                    Forms\Components\Textarea::make('persyaratan_pendaftaran')
+                        ->label('Persyaratan Pendaftaran')
+                        ->helperText('Satu baris = satu syarat')
+                        ->rows(6)
+                        ->placeholder("FC Kartu Keluarga\nFC Akte Kelahiran\nFC KTP Orang Tua\nFC Ijazah SMP/MTs\nFC KIP (jika ada)\nPas Foto 3x4"),
+
+                    Forms\Components\Textarea::make('ekstrakurikuler')
+                        ->label('Ekstrakurikuler')
+                        ->helperText('Satu baris = satu ekskul')
+                        ->rows(8)
+                        ->placeholder("E-sport\nHadroh\nFutsal\nEngineering\nSoftware Engineering\nTari\nMusik\nVolly\nPMR\nPramuka"),
                 ]),
 
                  // GOOGLE MAPS

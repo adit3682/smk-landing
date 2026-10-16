@@ -3,13 +3,39 @@
 @section('title', $jurusan->nama)
 
 @section('content')
-<div class="pt-32 pb-20 px-6 max-w-3xl mx-auto">
+<div class="pt-32 pb-20 px-6 max-w-5xl mx-auto">
 
-    <span class="text-sm font-semibold text-blue-600 uppercase">Kompetensi Keahlian</span>
-    <h1 class="text-4xl font-extrabold text-blue-950 mt-2 mb-8">{{ $jurusan->nama }}</h1>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-14">
 
-    <div class="prose prose-blue max-w-none text-slate-700 mb-10">
-        <p>{{ $jurusan->deskripsi }}</p>
+        {{-- Teks --}}
+        <div>
+            <span class="text-sm font-semibold text-blue-600 uppercase">Kompetensi Keahlian</span>
+            <h1 class="text-4xl font-extrabold text-blue-950 mt-2 mb-6">{{ $jurusan->nama }}</h1>
+            <div class="prose prose-blue max-w-none text-slate-700">
+                <p>{{ $jurusan->deskripsi }}</p>
+            </div>
+        </div>
+
+        {{-- Foto + dekorasi segitiga --}}
+        @if($jurusan->foto_utama)
+            <div class="relative mx-auto lg:mx-0 max-w-sm">
+                <svg class="absolute -top-8 -left-6 w-16 h-16 text-yellow-400 z-0" viewBox="0 0 100 100" fill="none">
+                    <polygon points="50,10 90,90 10,90" stroke="currentColor" stroke-width="7"/>
+                </svg>
+                <svg class="absolute top-1/3 -right-8 w-10 h-10 text-yellow-400 rotate-12 z-0" viewBox="0 0 100 100" fill="none">
+                    <polygon points="50,10 90,90 10,90" stroke="currentColor" stroke-width="8"/>
+                </svg>
+                <svg class="absolute -bottom-6 -right-4 w-20 h-20 text-yellow-400 -rotate-6 z-0" viewBox="0 0 100 100" fill="none">
+                    <polygon points="50,10 90,90 10,90" stroke="currentColor" stroke-width="6"/>
+                </svg>
+
+                <img src="{{ Storage::url($jurusan->foto_utama) }}"
+                     alt="{{ $jurusan->nama }}"
+                     class="relative z-10 w-full aspect-[4/5] object-cover shadow-xl"
+                     style="border-radius: 28px; clip-path: polygon(40px 0, 100% 0, 100% 100%, 0 100%, 0 40px);">
+            </div>
+        @endif
+
     </div>
 
     @if($jurusan->kurikulum)

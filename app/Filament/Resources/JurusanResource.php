@@ -40,6 +40,13 @@ class JurusanResource extends Resource
                     ->imageEditor() 
                     ->saveUploadedFileUsing(\App\Support\ImageUpload::webp('jurusan')) 
                     ->label('Icon Jurusan'),
+                Forms\Components\FileUpload::make('foto_utama')
+                    ->image()
+                    ->directory('jurusan-utama')
+                    ->imageEditor()
+                    ->saveUploadedFileUsing(\App\Support\ImageUpload::webp('jurusan-utama'))
+                    ->label('Foto Utama Jurusan')
+                    ->helperText('Foto siswa/kegiatan yang mewakili jurusan ini, ditampilkan besar di halaman detail'),
             ]);
     }
 
