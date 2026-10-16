@@ -76,6 +76,21 @@ class ProfilSekolahResource extends Resource
                         ->rows(5)
                         ->placeholder('Assalamu\'alaikum warahmatullahi wabarakatuh...'),
                 ]),
+                Forms\Components\Section::make('Mengapa Memilih Kami')
+    ->description('Ditampilkan di Beranda')
+    ->schema([
+        Forms\Components\FileUpload::make('foto_mengapa_memilih')
+            ->image()
+            ->directory('mengapa-memilih')
+            ->imageEditor()
+            ->label('Foto')
+            ->saveUploadedFileUsing(\App\Support\ImageUpload::webp('mengapa-memilih')),
+
+        Forms\Components\Textarea::make('mengapa_memilih_teks')
+            ->label('Teks Penjelasan')
+            ->rows(5)
+            ->helperText('Kosongkan untuk memakai teks bawaan.'),
+    ]),
 
             Forms\Components\Textarea::make('visi')
                 ->columnSpanFull(),

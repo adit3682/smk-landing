@@ -72,18 +72,19 @@
         </section>
     @endif
 
-    {{-- MENGAPA MEMILIH KAMI --}}
+        {{-- MENGAPA MEMILIH KAMI --}}
     <section id="mengapa-memilih" data-fade-in class="py-16 px-4 sm:px-6 bg-white opacity-0 translate-y-8 transition duration-700">
         <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
 
             <div>
-                @if (file_exists(public_path('images/mengapa-memilih.jpg')))
-                    <img src="{{ asset('images/mengapa-memilih.jpg') }}"
+                @if($profilSekolah?->foto_mengapa_memilih)
+                    <img src="{{ Storage::url($profilSekolah->foto_mengapa_memilih) }}"
                          alt="Mengapa memilih {{ $profilSekolah->nama_sekolah ?? 'sekolah kami' }}"
+                         loading="lazy"
                          class="w-full aspect-[16/9] object-cover shadow-md">
                 @else
                     <div class="w-full aspect-[16/9] bg-blue-100 flex items-center justify-center text-blue-400 text-sm">
-                        Letakkan gambar di public/images/mengapa-memilih.jpg
+                        Foto belum diupload
                     </div>
                 @endif
             </div>
@@ -94,12 +95,18 @@
                     <span class="text-slate-900">{{ $profilSekolah->nama_sekolah ?? 'SMK Kami' }} ?</span>
                 </h2>
 
-                <p class="mt-5 text-slate-600 leading-8 text-justify">
-                    <strong class="text-slate-900">{{ $profilSekolah->nama_sekolah ?? 'Sekolah kami' }}</strong>
-                    dikenal sebagai sekolah kejuruan yang berwawasan teknologi dalam mencetak lulusan
-                    yang <strong class="text-slate-900">kompeten, berkarakter, dan siap kerja</strong>,
-                    serta mampu bersaing di dunia usaha dan dunia industri.
-                </p>
+                @if($profilSekolah?->mengapa_memilih_teks)
+                    <p class="mt-5 text-slate-600 leading-8 text-justify">
+                        {!! nl2br(e($profilSekolah->mengapa_memilih_teks)) !!}
+                    </p>
+                @else
+                    <p class="mt-5 text-slate-600 leading-8 text-justify">
+                        <strong class="text-slate-900">{{ $profilSekolah->nama_sekolah ?? 'Sekolah kami' }}</strong>
+                        dikenal sebagai sekolah kejuruan yang berwawasan teknologi dalam mencetak lulusan
+                        yang <strong class="text-slate-900">kompeten, berkarakter, dan siap kerja</strong>,
+                        serta mampu bersaing di dunia usaha dan dunia industri.
+                    </p>
+                @endif
 
                 <a href="{{ route('profil-sekolah') }}"
                    class="inline-block mt-8 px-8 py-3 rounded-full bg-amber-500 hover:bg-amber-600 text-white text-sm font-medium transition">
