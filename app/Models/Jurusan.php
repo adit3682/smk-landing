@@ -11,12 +11,14 @@ class Jurusan extends Model
     use HasFactory;
 
     protected $fillable = [
-        'nama', 
-        'slug', 
-        'icon', 
-        'deskripsi', 
-        'kurikulum', 
-        'prospek_kerja'
+        'nama',
+        'slug',
+        'icon',
+        'foto_utama',
+        'deskripsi',
+        'kurikulum',
+        'keterampilan',
+        'prospek_kerja',
     ];
 
     /**
