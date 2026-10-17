@@ -57,18 +57,31 @@
                     @endif
                 </div>
                 @if($akreditasi ?? null)
-                    <div class="absolute -bottom-4 -left-2 sm:bottom-6 sm:-left-8 glass rounded-2xl px-4 py-3 shadow-card border border-white/40">
-                        <div class="flex items-center gap-3">
-                            <div class="w-11 h-11 shrink-0 rounded-xl bg-brand-600 flex items-center justify-center text-white font-extrabold text-center leading-tight {{ strlen($akreditasi->peringkat) > 2 ? 'text-[10px]' : 'text-xl' }}">
-                                {{ $akreditasi->peringkat }}
-                            </div>
-                            <div>
-                                <div class="text-sm font-bold text-brand-950">Terakreditasi {{ $akreditasi->peringkat }}</div>
-                                <div class="text-xs text-slate-500">{{ $akreditasi->lembaga_penerbit }} &middot; s.d. {{ $akreditasi->tahun_berlaku }}</div>
-                            </div>
-                        </div>
-                    </div>
+    @php
+        $keteranganAkreditasi = collect([
+            $akreditasi->lembaga_penerbit,
+            $akreditasi->tahun_ditetapkan ? 'Ditetapkan ' . $akreditasi->tahun_ditetapkan : null,
+        ])->filter()->implode(' · ');
+    @endphp
+    <div class="absolute top-[53%] -left-2 sm:-left-8 glass rounded-2xl px-4 py-3 shadow-card border border-white/40">
+        <div class="flex items-center gap-3">
+            @if($akreditasi->logo)
+                <img src="{{ Storage::url($akreditasi->logo) }}" alt="Logo akreditasi {{ $akreditasi->peringkat }}"
+                     loading="lazy" class="w-11 h-11 shrink-0 object-contain">
+            @else
+                <div class="w-11 h-11 shrink-0 rounded-xl bg-brand-600 flex items-center justify-center text-white font-extrabold text-center leading-tight {{ strlen($akreditasi->peringkat) > 2 ? 'text-[10px]' : 'text-xl' }}">
+                    {{ $akreditasi->peringkat }}
+                </div>
+            @endif
+            <div>
+                <div class="text-sm font-bold text-brand-950">Terakreditasi {{ $akreditasi->peringkat }}</div>
+                @if($keteranganAkreditasi)
+                    <div class="text-xs text-slate-500">{{ $keteranganAkreditasi }}</div>
                 @endif
+            </div>
+        </div>
+    </div>
+@endif
             </div>
         </div>
 
@@ -287,34 +300,132 @@
     </div>
 </section>
 
-{{-- GALERI --}}
-<section data-fade-in class="bg-slate-50 py-24 px-6 opacity-0 translate-y-8 transition duration-700 overflow-hidden">
+{{-- GALERI KEGIATAN (bento + lightbox) --}}
+@php
+    // Maksimal 8 foto. Pola bento hanya rapi untuk tepat 8 foto;
+    // kalau kurang, dipotong ke kelipatan 4 dan tampil sebagai grid seragam.
+    $galeriItems = ($galeris ?? collect())->take(8);
+    if ($galeriItems->count() < 8 && $galeriItems->count() >= 4) {
+        $galeriItems = $galeriItems->take(intdiv($galeriItems->count(), 4) * 4);
+    }
+    $pakaiBento = $galeriItems->count() === 8;
+    $kelasBento = [0 => 'bento-wide bento-tall', 3 => 'bento-tall'];
+@endphp
+<section id="galeri" class="py-24 px-6 bg-slate-50 overflow-hidden scroll-mt-24">
     <div class="max-w-6xl mx-auto">
-        <div class="text-center mb-12">
-            <p class="text-brand-600 font-semibold text-sm tracking-wide uppercase mb-2">Dokumentasi</p>
-            <h2 class="text-3xl md:text-4xl font-extrabold text-brand-950 tracking-tight">Galeri Kegiatan</h2>
+
+        <div class="gal-reveal flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10 md:mb-12">
+            <div>
+                <p class="text-brand-600 font-semibold text-sm tracking-wide uppercase mb-2">Dokumentasi</p>
+                <h2 class="text-3xl md:text-4xl font-extrabold text-brand-950 tracking-tight">Galeri Kegiatan</h2>
+                <p class="mt-2 text-slate-500 text-[15px] max-w-md">
+                    Momen berharga dari kegiatan belajar, lomba, dan kebersamaan di sekolah kami.
+                </p>
+            </div>
+            @if(\Illuminate\Support\Facades\Route::has('galeri'))
+                <a href="{{ route('galeri') }}" class="inline-flex items-center gap-2 text-brand-600 font-semibold text-sm hover:gap-3 transition-all shrink-0">
+                    Lihat semua <span aria-hidden="true">&rarr;</span>
+                </a>
+            @endif
         </div>
-        <div class="overflow-hidden">
-            <div id="carousel-galeri" class="flex gap-5 w-max">
-                @forelse($galeris as $galeri)
-                    <div class="flex-shrink-0 w-64">
+
+        @if($galeriItems->count())
+            <div class="gal-grid grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 auto-rows-[140px] md:auto-rows-[160px]">
+                @foreach($galeriItems as $i => $galeri)
+                    @php
+                        $tanggalGaleri = $galeri->created_at?->locale('id')->translatedFormat('d M Y');
+                        $besar = $pakaiBento && $i === 0;
+                    @endphp
+                    <div class="gal-reveal gal-delay-{{ $i % 5 }} gallery-card {{ $pakaiBento ? ($kelasBento[$i] ?? '') : '' }} bg-brand-100"
+                         role="button" tabindex="0"
+                         data-src="{{ !empty($galeri->foto) ? Storage::url($galeri->foto) : '' }}"
+                         data-title="{{ $galeri->judul }}"
+                         data-date="{{ $tanggalGaleri }}">
                         @if(!empty($galeri->foto))
                             <img src="{{ Storage::url($galeri->foto) }}" alt="{{ $galeri->judul }}"
-                                 loading="lazy" decoding="async" width="256" height="144"
-                                 class="w-full aspect-video object-cover rounded-2xl mb-3 shadow-sm">
+                                 loading="lazy" decoding="async">
                         @else
-                            <div class="w-full aspect-video bg-brand-100 rounded-2xl mb-3"></div>
+                            <div class="w-full h-full bg-gradient-to-br from-brand-800 to-brand-600"></div>
                         @endif
-                        <div class="text-sm font-semibold text-brand-950 truncate">{{ $galeri->judul }}</div>
-                        <div class="text-xs text-slate-500">{{ $galeri->created_at->format('d M Y') }}</div>
+                        <div class="gallery-overlay"></div>
+                        <div class="gallery-content">
+                            @if($tanggalGaleri)
+                                <span class="gallery-badge">{{ $tanggalGaleri }}</span>
+                            @endif
+                            <h3 class="text-white font-bold {{ $besar ? 'text-base md:text-lg' : 'text-sm md:text-base' }} leading-tight">{{ $galeri->judul }}</h3>
+                            @if($besar && !empty($galeri->deskripsi))
+                                <p class="text-white/70 text-xs mt-1 hidden md:block line-clamp-2">{{ $galeri->deskripsi }}</p>
+                            @endif
+                        </div>
                     </div>
-                @empty
-                    <p class="text-slate-400 text-sm">Belum ada galeri.</p>
-                @endforelse
+                @endforeach
             </div>
-        </div>
+        @else
+            <p class="text-slate-400 text-sm text-center">Belum ada galeri.</p>
+        @endif
+
     </div>
 </section>
+
+{{-- Lightbox galeri --}}
+<div class="gal-lightbox" id="gal-lightbox" aria-hidden="true">
+    <button type="button" id="gal-lightbox-close" aria-label="Tutup"
+            class="absolute top-5 right-5 w-10 h-10 rounded-full bg-white/10 border border-white/20 text-white flex items-center justify-center hover:bg-white/20 transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
+    <img id="gal-lightbox-img" src="" alt="">
+    <div class="absolute bottom-8 left-0 right-0 text-center text-white px-6">
+        <div id="gal-lightbox-title" class="font-bold text-lg"></div>
+        <div id="gal-lightbox-date" class="text-sm text-white/60 mt-1"></div>
+    </div>
+</div>
+
+<script>
+(function () {
+    // Muncul saat di-scroll
+    const els = document.querySelectorAll('.gal-reveal');
+    if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const io = new IntersectionObserver(entries => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } });
+        }, { threshold: 0.12 });
+        els.forEach(el => io.observe(el));
+    } else {
+        els.forEach(el => el.classList.add('is-in'));
+    }
+
+    // Lightbox
+    const box = document.getElementById('gal-lightbox');
+    const img = document.getElementById('gal-lightbox-img');
+    const ttl = document.getElementById('gal-lightbox-title');
+    const dte = document.getElementById('gal-lightbox-date');
+    if (!box) return;
+
+    function buka(card) {
+        if (!card.dataset.src) return;
+        img.src = card.dataset.src;
+        img.alt = card.dataset.title || '';
+        ttl.textContent = card.dataset.title || '';
+        dte.textContent = card.dataset.date || '';
+        box.classList.add('open');
+        box.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+    }
+    function tutup() {
+        box.classList.remove('open');
+        box.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+    }
+
+    document.querySelectorAll('.gallery-card').forEach(card => {
+        card.addEventListener('click', () => buka(card));
+        card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); buka(card); } });
+    });
+    box.addEventListener('click', tutup);
+    img.addEventListener('click', e => e.stopPropagation());
+    document.getElementById('gal-lightbox-close').addEventListener('click', e => { e.stopPropagation(); tutup(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') tutup(); });
+})();
+</script>
 
 {{-- BERITA & ACARA (carousel) --}}
 @php
@@ -571,7 +682,6 @@
                 }
 
                 initInfiniteCarousel('#carousel-guru');
-                initInfiniteCarousel('#carousel-galeri');
             }
         });
     </script>

@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Akreditasi extends Model
 {
-    protected $fillable = ['peringkat', 'lembaga_penerbit', 'tahun_berlaku', 'file_sertifikat'];
+    protected $fillable = ['peringkat', 'lembaga_penerbit', 'tahun_ditetapkan', 'tahun_berlaku', 'file_sertifikat', 'logo'];
 }

@@ -176,12 +176,6 @@ class ProfilSekolahResource extends Resource
                         ->rows(8)
                         ->placeholder("E-sport\nHadroh\nFutsal\nEngineering\nSoftware Engineering\nTari\nMusik\nVolly\nPMR\nPramuka"),
 
-                    Forms\Components\Textarea::make('ekstrakurikuler')
-                        ->label('Ekstrakurikuler')
-                        ->helperText('Satu baris = satu ekskul')
-                        ->rows(8)
-                        ->placeholder("E-sport\nHadroh\nFutsal\nEngineering\nSoftware Engineering\nTari\nMusik\nVolly\nPMR\nPramuka"),
-
                         
                     Forms\Components\Textarea::make('spmb_gelombang')
                         ->label('Gelombang Pendaftaran')
@@ -193,6 +187,14 @@ class ProfilSekolahResource extends Resource
                         ->label('Prestasi Siswa')
                         ->rows(6)
                         ->helperText('Satu prestasi per baris.'),
+
+                    Forms\Components\Textarea::make('spmb_mitra')
+                        ->label('Mitra Industri')->rows(4)
+                        ->helperText('Satu baris = satu mitra.'),
+
+                    Forms\Components\Textarea::make('spmb_testimoni')
+                        ->label('Kata Alumni')->rows(8)
+                        ->helperText('Satu baris = satu testimoni. Format: Kutipan | Nama | Keterangan'),
 
                 ]),
 

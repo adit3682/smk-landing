@@ -20,7 +20,7 @@ class HomeController extends Controller
             'jumlahJurusan' => Jurusan::count(),
             'alumniPersen' => Pengaturan::where('key', 'alumni_terserap_persen')->value('value') ?? 0,
             'linkPpdb' => Pengaturan::where('key', 'link_ppdb')->value('value') ?? '#',
-            'akreditasi' => Akreditasi::latest('tahun_berlaku')->first(),
+            'akreditasi' => Akreditasi::orderByDesc('tahun_ditetapkan')->orderByDesc('tahun_berlaku')->first(),
         ]);
     }
 }

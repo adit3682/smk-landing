@@ -29,7 +29,17 @@ class AkreditasiResource extends Resource
                 Forms\Components\TextInput::make('lembaga_penerbit')
                     ->maxLength(255)
                     ->default(null),
-                Forms\Components\TextInput::make('tahun_berlaku'),
+                Forms\Components\TextInput::make('tahun_ditetapkan')
+                    ->label('Tahun Ditetapkan')
+                    ->numeric()->minValue(2000)->maxValue(2100)
+                    ->placeholder('2024'),
+                Forms\Components\TextInput::make('tahun_berlaku')
+                    ->label('Berlaku Sampai'),
+                Forms\Components\FileUpload::make('logo')
+                    ->label('Logo Akreditasi')
+                    ->image()
+                    ->directory('akreditasi')
+                    ->imageEditor(),
                 Forms\Components\FileUpload::make('file_sertifikat')
                     ->directory('sertifikat'),
             ]);
