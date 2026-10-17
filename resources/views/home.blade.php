@@ -56,18 +56,19 @@
                         </div>
                     @endif
                 </div>
-
-                <div class="absolute -bottom-4 -left-2 sm:bottom-6 sm:-left-8 glass rounded-2xl px-4 py-3 shadow-card border border-white/40">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-brand-600 flex items-center justify-center text-white font-bold">
-                            {{ $jumlahJurusan ?? 0 }}
-                        </div>
-                        <div>
-                            <div class="text-sm font-bold text-brand-950">Akreditasi Baik</div>
-                            <div class="text-xs text-slate-500">Siap bersaing global</div>
+                @if($akreditasi ?? null)
+                    <div class="absolute -bottom-4 -left-2 sm:bottom-6 sm:-left-8 glass rounded-2xl px-4 py-3 shadow-card border border-white/40">
+                        <div class="flex items-center gap-3">
+                            <div class="w-11 h-11 shrink-0 rounded-xl bg-brand-600 flex items-center justify-center text-white font-extrabold text-center leading-tight {{ strlen($akreditasi->peringkat) > 2 ? 'text-[10px]' : 'text-xl' }}">
+                                {{ $akreditasi->peringkat }}
+                            </div>
+                            <div>
+                                <div class="text-sm font-bold text-brand-950">Terakreditasi {{ $akreditasi->peringkat }}</div>
+                                <div class="text-xs text-slate-500">{{ $akreditasi->lembaga_penerbit }} &middot; s.d. {{ $akreditasi->tahun_berlaku }}</div>
+                            </div>
                         </div>
                     </div>
-                </div>
+                @endif
             </div>
         </div>
 

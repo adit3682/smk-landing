@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{Guru, Jurusan, Galeri, Artikel, ProfilSekolah, DataSiswaTahunan, Staf, Pengaturan, Sarpras};
+use App\Models\{Guru, Jurusan, Galeri, Artikel, ProfilSekolah, DataSiswaTahunan, Staf, Pengaturan, Sarpras, Akreditasi};
 
 class HomeController extends Controller
 {
@@ -20,6 +20,7 @@ class HomeController extends Controller
             'jumlahJurusan' => Jurusan::count(),
             'alumniPersen' => Pengaturan::where('key', 'alumni_terserap_persen')->value('value') ?? 0,
             'linkPpdb' => Pengaturan::where('key', 'link_ppdb')->value('value') ?? '#',
+            'akreditasi' => Akreditasi::latest('tahun_berlaku')->first(),
         ]);
     }
 }
