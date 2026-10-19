@@ -9,6 +9,7 @@ use App\Http\Controllers\JurusanController;
 use App\Http\Controllers\TransparansiController;
 use App\Http\Controllers\FasilitasController;
 use App\Http\Controllers\KontakController;
+use App\Http\Controllers\GaleriController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/profil-sekolah', [ProfilSekolahController::class, 'index'])->name('profil-sekolah');
@@ -19,3 +20,4 @@ Route::get('/transparansi', [TransparansiController::class, 'index'])->name('tra
  Route::get('/spmb', [SpmbController::class, 'index'])->name('spmb');
  Route::get('/fasilitas', [FasilitasController::class, 'index'])->name('fasilitas');
  Route::get('/kontak', [KontakController::class, 'index'])->name('kontak');
+ Route::get('/galeri', [GaleriController::class, 'index'])->name('galeri');
