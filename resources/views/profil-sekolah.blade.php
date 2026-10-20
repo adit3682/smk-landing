@@ -146,11 +146,18 @@
         <p class="text-brand-600 font-semibold text-sm tracking-wide uppercase mb-2">Pengakuan</p>
         <h2 class="text-2xl md:text-3xl font-extrabold text-brand-950 tracking-tight mb-6">Akreditasi</h2>
         @if($akreditasi)
-            <div class="inline-flex items-center gap-4 bg-gradient-to-br from-brand-900 to-brand-950 text-white px-7 py-5 rounded-2xl shadow-card">
-                <span class="text-4xl font-extrabold">{{ $akreditasi->peringkat }}</span>
+            <div class="inline-flex items-center gap-4 bg-gradient-to-br from-brand-900 to-brand-950 text-white px-6 py-5 rounded-2xl shadow-card">
+                @if($akreditasi->logo)
+                    <div class="w-16 h-16 shrink-0 rounded-2xl bg-white flex items-center justify-center overflow-hidden">
+                        <img src="{{ Storage::url($akreditasi->logo) }}" alt="Logo akreditasi {{ $akreditasi->peringkat }}"
+                             class="w-full h-full object-contain p-1.5">
+                    </div>
+                @else
+                    <span class="text-4xl font-extrabold">{{ $akreditasi->peringkat }}</span>
+                @endif
                 <div class="text-sm">
-                    <div class="font-semibold">{{ $akreditasi->lembaga_penerbit }}</div>
-                    <div class="text-brand-200">Berlaku s.d. {{ $akreditasi->tahun_berlaku }}</div>
+                    <div class="font-semibold text-base">Terakreditasi {{ $akreditasi->peringkat }}</div>
+                    <div class="text-brand-200">{{ collect([$akreditasi->lembaga_penerbit, $akreditasi->tahun_ditetapkan ? 'Ditetapkan ' . $akreditasi->tahun_ditetapkan : null])->filter()->implode(' · ') }}</div>
                 </div>
             </div>
         @else
@@ -163,6 +170,41 @@
         <p class="text-brand-600 font-semibold text-sm tracking-wide uppercase mb-2">Organisasi</p>
         <h2 class="text-2xl md:text-3xl font-extrabold text-brand-950 tracking-tight mb-8">Struktur Organisasi</h2>
 
+        @if(!empty($profilSekolah?->struktur_gambar))
+            @php $gambarStruktur = \Illuminate\Support\Facades\Storage::url($profilSekolah->struktur_gambar); @endphp
+            <div x-data="{ buka: false }" @keydown.escape.window="buka = false">
+                <button type="button" @click="buka = true"
+                        class="group relative block w-full rounded-2xl overflow-hidden border border-brand-100 shadow-card bg-white cursor-zoom-in">
+                    <img src="{{ $gambarStruktur }}" alt="Struktur Organisasi {{ $profilSekolah->nama_sekolah ?? '' }}"
+                         loading="lazy" decoding="async" class="w-full h-auto block">
+                    <span class="absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full bg-brand-950/80 backdrop-blur text-white text-xs font-semibold px-3 py-1.5 group-hover:bg-brand-600 transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M11 8v6M8 11h6m6 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        Perbesar
+                    </span>
+                </button>
+
+                {{-- Layar penuh: di HP bisa digeser untuk melihat detail --}}
+                <div x-show="buka" style="display:none" x-transition.opacity
+                     class="fixed inset-0 z-[100] bg-slate-900/95 backdrop-blur-sm flex flex-col"
+                     role="dialog" aria-modal="true" aria-label="Struktur Organisasi">
+                    <div class="flex items-center justify-between px-5 py-4 text-white shrink-0">
+                        <span class="font-bold text-sm">Struktur Organisasi</span>
+                        <div class="flex items-center gap-2">
+                            <a href="{{ $gambarStruktur }}" download
+                               class="rounded-full bg-white/10 border border-white/20 hover:bg-white/20 transition text-xs font-semibold px-3 py-2">Unduh</a>
+                            <button type="button" @click="buka = false" aria-label="Tutup"
+                                    class="w-9 h-9 rounded-full bg-white/10 border border-white/20 hover:bg-white/20 transition flex items-center justify-center">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex-1 overflow-auto px-4 pb-6" @click.self="buka = false">
+                        <img src="{{ $gambarStruktur }}" alt="Struktur Organisasi"
+                             class="mx-auto h-auto rounded-xl min-w-[900px] max-w-none lg:min-w-0 lg:max-w-full">
+                    </div>
+                </div>
+            </div>
+        @else
         {{-- Desktop: tree dengan garis penghubung --}}
         <div class="hidden md:flex flex-col items-center">
             @if($struktur->count() > 0)
@@ -208,6 +250,7 @@
                 </div>
             @endforeach
         </div>
+        @endif
     </section>
 
     {{-- PROFIL YAYASAN --}}

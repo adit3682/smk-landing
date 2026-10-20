@@ -42,6 +42,7 @@ class ProfilSekolah extends Model
         'struktur_yayasan',
         'spmb_mitra',
         'spmb_testimoni',
+        'struktur_gambar',
     ];
     protected $casts = [
     'misi' => 'array',

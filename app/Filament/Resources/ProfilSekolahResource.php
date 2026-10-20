@@ -196,6 +196,12 @@ class ProfilSekolahResource extends Resource
                         ->label('Kata Alumni')->rows(8)
                         ->helperText('Satu baris = satu testimoni. Format: Kutipan | Nama | Keterangan'),
 
+                       Forms\Components\FileUpload::make('struktur_gambar')
+                        ->label('Gambar Struktur Organisasi')
+                        ->image()->directory('profil')->imageEditor()
+                        ->saveUploadedFileUsing(\App\Support\ImageUpload::webp('profil', 90))
+                        ->helperText('Unggah gambar bagan utuh. Disarankan lebar minimal 1600px.'),
+
                 ]),
 
                  // GOOGLE MAPS
