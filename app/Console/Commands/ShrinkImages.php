@@ -22,6 +22,8 @@ class ShrinkImages extends Command
             return self::FAILURE;
         }
 
+        @ini_set('memory_limit', '1024M');
+
         $folder  = trim($this->argument('folder'), '/');
         $maks    = (int) $this->option('width');
         $kualitas = (int) $this->option('quality');
@@ -43,8 +45,14 @@ class ShrinkImages extends Command
             if (!$img) { $total1 += $sebelum; $this->warn("Lewati (gagal dibaca): $path"); continue; }
 
             $w = imagesx($img);
+            $h = imagesy($img);
             if ($w > $maks) {
-                $baru = imagescale($img, $maks, -1, IMG_BICUBIC);
+                $hBaru = max(1, (int) round($h * $maks / $w));
+                $baru = imagecreatetruecolor($maks, $hBaru);
+                if (!$baru) { imagedestroy($img); $total1 += $sebelum; $this->warn("Lewati (gagal membuat kanvas): $path"); continue; }
+                imagealphablending($baru, false);
+                imagesavealpha($baru, true);
+                imagecopyresampled($baru, $img, 0, 0, 0, 0, $maks, $hBaru, $w, $h);
                 imagedestroy($img);
                 $img = $baru;
             }
