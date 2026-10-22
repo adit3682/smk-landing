@@ -98,6 +98,12 @@ class ProfilSekolahResource extends Resource
             ->label('Teks Penjelasan')
             ->rows(5)
             ->helperText('Kosongkan untuk memakai teks bawaan.'),
+
+        Forms\Components\TextInput::make('video_profil_url')
+            ->label('Link Video YouTube (Profil Sekolah)')
+            ->url()
+            ->placeholder('https://www.youtube.com/watch?v=...')
+            ->helperText('Tempel link YouTube. Kosongkan jika tidak ingin menampilkan video.'),
     ]),
 
             Forms\Components\Textarea::make('visi')

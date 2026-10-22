@@ -9,6 +9,17 @@
         ->map(fn ($b) => array_map('trim', array_pad(explode('|', $b), 2, '')))
         ->filter(fn ($x) => $x[0] !== '')
         ->values();
+
+    // Video profil (YouTube): terima link watch, youtu.be, embed, shorts, live, atau ID 11 karakter
+    $videoId = null;
+    $videoUrl = trim((string) ($profilSekolah?->video_profil_url));
+    if ($videoUrl !== '') {
+        if (preg_match('~(?:youtu\.be/|youtube(?:-nocookie)?\.com/(?:watch\?(?:[^#]*&)?v=|embed/|shorts/|live/|v/))([A-Za-z0-9_-]{11})~', $videoUrl, $m)) {
+            $videoId = $m[1];
+        } elseif (preg_match('/^[A-Za-z0-9_-]{11}$/', $videoUrl)) {
+            $videoId = $videoUrl;
+        }
+    }
 @endphp
 
 {{-- HEADER HALAMAN --}}
@@ -68,6 +79,40 @@
                     <div class="font-bold text-brand-950">{{ $profilSekolah->nama_kepala_sekolah ?? '-' }}</div>
                     <div class="text-sm text-slate-500">Kepala Sekolah</div>
                 </div>
+            </div>
+        </section>
+    @endif
+
+    {{-- VIDEO PROFIL (YouTube, dimuat saat diklik) --}}
+    @if($videoId)
+        <section data-fade-in class="mb-20 opacity-0 translate-y-8 transition duration-700">
+            <p class="text-brand-600 font-semibold text-sm tracking-wide uppercase mb-2">Video</p>
+            <h2 class="text-2xl md:text-3xl font-extrabold text-brand-950 tracking-tight mb-6">Profil {{ $profilSekolah->nama_sekolah ?? 'Sekolah' }}</h2>
+
+            <div x-data="{ putar: false }" class="relative aspect-video rounded-3xl overflow-hidden shadow-card border border-brand-100 bg-brand-950">
+                <template x-if="!putar">
+                    <button type="button" @click="putar = true"
+                            class="group absolute inset-0 w-full h-full cursor-pointer"
+                            aria-label="Putar video profil sekolah">
+                        <img src="https://i.ytimg.com/vi/{{ $videoId }}/hqdefault.jpg" alt=""
+                             loading="lazy" decoding="async"
+                             class="absolute inset-0 w-full h-full object-cover transition duration-500 group-hover:scale-105">
+                        <span class="absolute inset-0 bg-gradient-to-t from-brand-950/60 via-brand-950/10 to-transparent"></span>
+                        <span class="absolute inset-0 flex items-center justify-center">
+                            <span class="w-20 h-20 rounded-full bg-white/95 text-brand-700 flex items-center justify-center shadow-glow group-hover:scale-110 transition">
+                                <svg class="w-8 h-8 ml-1" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+                            </span>
+                        </span>
+                        <span class="absolute bottom-4 left-5 text-white text-sm font-semibold">Tonton video profil</span>
+                    </button>
+                </template>
+                <template x-if="putar">
+                    <iframe class="absolute inset-0 w-full h-full"
+                            src="https://www.youtube-nocookie.com/embed/{{ $videoId }}?autoplay=1&rel=0"
+                            title="Video profil {{ $profilSekolah->nama_sekolah ?? 'sekolah' }}"
+                            allow="accelerometer; autoplay; encrypted-media; picture-in-picture; fullscreen"
+                            allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                </template>
             </div>
         </section>
     @endif
