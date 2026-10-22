@@ -232,12 +232,12 @@
             <h2 class="text-3xl md:text-4xl font-extrabold text-brand-950 tracking-tight">Guru &amp; Tenaga Pengajar</h2>
         </div>
         <div class="overflow-hidden">
-            <div id="carousel-guru" class="flex gap-5 w-max">
+            <div id="carousel-guru" class="flex gap-5 w-max" style="will-change: transform;">
                 @forelse($gurus as $guru)
                     <div class="flex-shrink-0 w-48 bg-white rounded-2xl border border-slate-100 shadow-sm p-4 text-center">
                         @if(!empty($guru->foto))
                             <img src="{{ Storage::url($guru->foto) }}" alt="{{ $guru->nama }}"
-                                 loading="lazy" decoding="async" width="176" height="176"
+                                 loading="eager" decoding="async" width="176" height="176"
                                  class="w-full aspect-square object-cover rounded-xl mb-3">
                         @else
                             <div class="w-full aspect-square bg-brand-100 rounded-xl mb-3 flex items-center justify-center text-brand-400 font-bold text-xl">
@@ -647,16 +647,17 @@
                 // Hero Stacking Effect
                 const hero = document.querySelector('#hero-section');
                 if (hero) {
+                    hero.style.willChange = 'transform, opacity';
                     gsap.to(hero, {
-                        scale: 0.92,
-                        opacity: 0.4,
-                        filter: 'blur(2px)',
+                        scale: 0.94,
+                        opacity: 0.5,
                         ease: 'none',
+                        force3D: true,
                         scrollTrigger: {
                             trigger: hero,
                             start: 'top top',
                             end: 'bottom top',
-                            scrub: true,
+                            scrub: 0.3,
                         }
                     });
                 }
@@ -665,8 +666,10 @@
                     const track = document.querySelector(trackSelector);
                     if (!track || track.children.length === 0) return;
 
-                    const originalContent = track.innerHTML;
-                    track.innerHTML = originalContent + originalContent;
+                    // gandakan isi tanpa membuat ulang gambar dari HTML string
+                    Array.from(track.children).forEach(function (el) {
+                        track.appendChild(el.cloneNode(true));
+                    });
 
                     const totalWidth = track.scrollWidth / 2;
 
@@ -675,10 +678,18 @@
                         duration: totalWidth / 40,
                         ease: 'none',
                         repeat: -1,
+                        force3D: true,
                     });
 
-                    track.addEventListener('mouseenter', () => tween.pause());
-                    track.addEventListener('mouseleave', () => tween.play());
+                    track.addEventListener('mouseenter', function () { tween.pause(); });
+                    track.addEventListener('mouseleave', function () { tween.play(); });
+
+                    // berhenti saat carousel tidak terlihat -> hemat CPU/GPU
+                    if ('IntersectionObserver' in window) {
+                        new IntersectionObserver(function (entries) {
+                            if (entries[0].isIntersecting) { tween.play(); } else { tween.pause(); }
+                        }, { threshold: 0.05 }).observe(track.parentElement);
+                    }
                 }
 
                 initInfiniteCarousel('#carousel-guru');

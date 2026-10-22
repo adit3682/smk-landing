@@ -106,7 +106,7 @@
         </div>
     </section>
 
-    {{-- STAF TU --}}
+    <!-- {{-- STAF TU --}}
     <section data-fade-in class="mb-20 opacity-0 translate-y-8 transition duration-700">
         <p class="text-brand-600 font-semibold text-sm tracking-wide uppercase mb-2">Tim Kami</p>
         <h2 class="text-2xl md:text-3xl font-extrabold text-brand-950 tracking-tight mb-6">Staf Tata Usaha</h2>
@@ -129,7 +129,7 @@
                 <p class="text-slate-400 text-sm col-span-4">Belum ada data staf.</p>
             @endforelse
         </div>
-    </section>
+    </section> -->
 
     {{-- TAUTAN FASILITAS --}}
     <section data-fade-in class="mb-20 opacity-0 translate-y-8 transition duration-700">
