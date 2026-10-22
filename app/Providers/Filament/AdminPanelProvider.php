@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Models\ProfilSekolah;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -16,25 +17,38 @@ use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
+        // URL logo sekolah; null jika belum diupload (Filament lalu menampilkan nama brand).
+        $logoUrl = function () {
+            $logo = ProfilSekolah::first()?->logo;
+
+            return $logo ? Storage::url($logo) : null;
+        };
+
         return $panel
             ->default()
             ->id('admin')
             ->path('admin')
             ->login(\App\Filament\Pages\Auth\Login::class)
-            ->login(\App\Filament\Pages\Auth\Login::class)
             ->colors([
                 'primary' => Color::hex('#172554'),
             ])
             ->brandName('SMK TI Bina Citra Informatika')
-            ->brandLogo(fn () => asset('storage/' . (\App\Models\ProfilSekolah::first()->logo ?? '')))
+            ->brandLogo($logoUrl)
             ->brandLogoHeight('2.5rem')
-            ->favicon(fn () => asset('storage/' . (\App\Models\ProfilSekolah::first()->logo ?? '')))
+            ->favicon($logoUrl)
+
+            // Menu samping: tombol toggle di desktop (ciut jadi ikon). Di HP otomatis hamburger.
+            ->sidebarCollapsibleOnDesktop()
+            // Konten memakai lebar layar penuh
+            ->maxContentWidth('full')
+
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
