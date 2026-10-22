@@ -208,6 +208,14 @@ class ProfilSekolahResource extends Resource
                         ->saveUploadedFileUsing(\App\Support\ImageUpload::webp('profil', 90))
                         ->helperText('Unggah gambar bagan utuh. Disarankan lebar minimal 1600px.'),
 
+                     Forms\Components\FileUpload::make('spmb_brosur_pdf')
+                        ->label('File PDF Brosur & Poster SPMB (gabungan)')
+                        ->acceptedFileTypes(['application/pdf'])
+                        ->directory('spmb')
+                        ->maxSize(20480)   // 20 MB
+                        ->downloadable()
+                        ->helperText('Satu file PDF berisi semua poster/brosur. Disarankan di bawah 20 MB.'),
+
                 ]),
 
                  // GOOGLE MAPS

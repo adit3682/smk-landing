@@ -44,6 +44,7 @@ class ProfilSekolah extends Model
         'spmb_testimoni',
         'struktur_gambar',
         'video_profil_url',
+        'spmb_brosur_pdf',
     ];
     protected $casts = [
     'misi' => 'array',

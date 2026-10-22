@@ -22,6 +22,13 @@
     // Poster / brosur yang di-upload admin
     $posters   = array_values(array_filter((array) ($profil?->spmb_posters ?? [])));
     $namaFile  = fn ($path, $i) => 'Brosur-SPMB-' . Str::slug($profil?->spmb_tahun_ajaran ?: 'sekolah') . '-' . ($i + 1) . '.' . (pathinfo($path, PATHINFO_EXTENSION) ?: 'jpg');
+    // Hanya 1 poster ditampilkan; semua brosur/poster digabung dalam 1 file PDF untuk diunduh
+    $poster1    = $posters[0] ?? null;
+    $pdf        = $profil?->spmb_brosur_pdf;
+    $linkUnduh  = $pdf ? Storage::url($pdf) : ($poster1 ? Storage::url($poster1) : null);
+    $namaUnduh  = $pdf ? 'Brosur-SPMB-' . Str::slug($profil?->spmb_tahun_ajaran ?: 'sekolah') . '.pdf'
+                       : ($poster1 ? $namaFile($poster1, 0) : null);
+    $labelUnduh = $pdf ? 'Unduh PDF' : 'Unduh Brosur';
     $linkDaftar = $profil?->spmb_link ?: '#daftar';
     $adaSarpras = isset($sarpras) && $sarpras->count();
     $adaMitra   = count($mitra) > 0;
@@ -55,19 +62,12 @@
             <a href="#jurusan" class="inline-flex items-center gap-2 text-white font-medium px-6 py-4 rounded-xl border border-white/25 hover:bg-white/10 transition">
                 Lihat Program Keahlian
             </a>
-            @if(count($posters))
-                @if(count($posters) === 1)
-                    <a href="{{ Storage::url($posters[0]) }}" download="{{ $namaFile($posters[0], 0) }}"
-                       class="inline-flex items-center gap-2 text-white font-medium px-6 py-4 rounded-xl border border-white/25 hover:bg-white/10 transition">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
-                        Unduh Brosur
-                    </a>
-                @else
-                    <a href="#brosur" class="inline-flex items-center gap-2 text-white font-medium px-6 py-4 rounded-xl border border-white/25 hover:bg-white/10 transition">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
-                        Unduh Brosur
-                    </a>
-                @endif
+            @if($linkUnduh)
+                <a href="{{ $linkUnduh }}" download="{{ $namaUnduh }}"
+                   class="inline-flex items-center gap-2 text-white font-medium px-6 py-4 rounded-xl border border-white/25 hover:bg-white/10 transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
+                    {{ $labelUnduh }}
+                </a>
             @endif
         </div>
 
@@ -200,8 +200,8 @@
     </section>
 @endif
 
-{{-- ========== BROSUR & POSTER (dengan tombol unduh) ========== --}}
-@if(count($posters))
+{{-- ========== BROSUR & POSTER (1 poster + unduh PDF) ========== --}}
+@if($poster1 || $pdf)
     <section id="brosur" data-fade-in class="py-20 px-6 bg-white opacity-0 translate-y-8 transition duration-700 scroll-mt-24">
         <div class="max-w-5xl mx-auto">
             <div class="text-center mb-12">
@@ -210,18 +210,25 @@
                 <p class="mt-3 text-slate-500 max-w-md mx-auto">Unduh untuk dibaca, dicetak, atau dibagikan ke keluarga dan teman.</p>
             </div>
 
-            <div class="grid grid-cols-1 {{ count($posters) > 1 ? 'md:grid-cols-2' : 'max-w-md mx-auto' }} gap-8">
-                @foreach($posters as $i => $poster)
-                    <div class="card-lift bg-slate-50 border border-slate-100 rounded-2xl p-4 shadow-sm">
-                        <img src="{{ Storage::url($poster) }}" alt="Poster SPMB {{ $i + 1 }}" loading="lazy" decoding="async"
-                             class="w-full rounded-xl shadow-card">
-                        <a href="{{ Storage::url($poster) }}" download="{{ $namaFile($poster, $i) }}"
-                           class="mt-4 flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold px-6 py-3 rounded-xl shadow-glow transition">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
-                            Unduh {{ count($posters) > 1 ? 'Poster ' . ($i + 1) : 'Brosur' }}
-                        </a>
+            <div class="max-w-md mx-auto card-lift bg-slate-50 border border-slate-100 rounded-2xl p-4 shadow-sm">
+                @if($poster1)
+                    <img src="{{ Storage::url($poster1) }}" alt="Poster SPMB" loading="lazy" decoding="async"
+                         class="w-full rounded-xl shadow-card">
+                @else
+                    <div class="aspect-[3/4] rounded-xl bg-gradient-to-br from-brand-800 to-brand-600 flex items-center justify-center text-white font-bold text-lg">
+                        Brosur SPMB (PDF)
                     </div>
-                @endforeach
+                @endif
+                @if($linkUnduh)
+                    <a href="{{ $linkUnduh }}" download="{{ $namaUnduh }}"
+                       class="mt-4 flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold px-6 py-3 rounded-xl shadow-glow transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
+                        {{ $labelUnduh }}
+                    </a>
+                    @if($pdf)
+                        <p class="mt-2 text-center text-xs text-slate-400">Berisi seluruh brosur &amp; poster SPMB</p>
+                    @endif
+                @endif
             </div>
         </div>
     </section>
@@ -367,12 +374,11 @@
                         Chat WhatsApp
                     </a>
                 @endif
-                @if(count($posters))
-                    <a href="{{ count($posters) === 1 ? Storage::url($posters[0]) : '#brosur' }}"
-                       @if(count($posters) === 1) download="{{ $namaFile($posters[0], 0) }}" @endif
+                @if($linkUnduh)
+                    <a href="{{ $linkUnduh }}" download="{{ $namaUnduh }}"
                        class="inline-flex items-center gap-2 border border-white/30 text-white font-semibold px-8 py-4 rounded-xl hover:bg-white/10 transition">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
-                        Unduh Brosur
+                        {{ $labelUnduh }}
                     </a>
                 @endif
             </div>
