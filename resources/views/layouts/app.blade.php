@@ -5,6 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', 'SMK Teknologi Informasi')</title>
 
+    {{-- FAVICON: logo sekolah dari admin (Profil Sekolah) --}}
+    @php
+        $faviconUrl = !empty($navProfil?->logo)
+            ? \Illuminate\Support\Facades\Storage::url($navProfil->logo) . '?v=' . ($navProfil->updated_at?->timestamp ?? 1)
+            : null;
+    @endphp
+    @if($faviconUrl)
+        <link rel="icon" type="image/webp" href="{{ $faviconUrl }}">
+        <link rel="shortcut icon" href="{{ $faviconUrl }}">
+        <link rel="apple-touch-icon" href="{{ $faviconUrl }}">
+    @endif
+
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,500,600,700,800" rel="stylesheet" />
 
