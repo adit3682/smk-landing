@@ -30,9 +30,10 @@
 <body class="font-sans text-slate-800 bg-white antialiased">
 
 {{-- TOP BAR KONTAK --}}
-@if($navProfil?->telepon || $navProfil?->email)
+@php $adaTopbar = (bool) ($navProfil?->telepon || $navProfil?->email); @endphp
+@if($adaTopbar)
     <div class="bg-blue-950 text-blue-100 text-xs">
-        <div class="max-w-7xl mx-auto px-6 py-2 flex flex-wrap items-center justify-center sm:justify-between gap-2">
+        <div class="w-[92%] max-w-5xl mx-auto px-5 py-2 flex flex-wrap items-center justify-center sm:justify-start gap-2">
             <div class="flex flex-wrap items-center gap-4">
                 @if($navProfil->telepon)
                     <a href="tel:{{ preg_replace('/\s+/', '', $navProfil->telepon) }}" class="hover:text-white transition">
@@ -61,7 +62,11 @@
     ];
 @endphp
 
-<header x-data="{ open: false }" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-5xl">
+<header x-data="{ open: false, geser: window.scrollY > 24 }"
+        @scroll.window.passive="geser = window.scrollY > 24"
+        :style="{ top: geser ? '16px' : '{{ $adaTopbar ? '52px' : '16px' }}' }"
+        style="top: {{ $adaTopbar ? '52px' : '16px' }}; transition: top .25s ease;"
+        class="fixed left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-5xl">
     <nav class="nav-glass flex items-center justify-between gap-4 rounded-2xl px-5 py-3 shadow-lg shadow-brand-950/5">
         <a href="{{ route('home') }}" class="flex items-center gap-2 font-bold text-brand-950 text-lg">
             @if($navProfil?->logo)
