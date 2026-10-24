@@ -14,6 +14,7 @@ class ProfilSekolahController extends Controller
             'stafs' => Staf::all(),
             'akreditasi' => Akreditasi::latest('tahun_berlaku')->first(),
             'struktur' => StrukturOrganisasi::orderBy('urutan')->get(),
+            'sarpras' => \App\Models\Sarpras::whereNotNull('foto')->where('foto', '!=', '')->take(3)->get(),
         ]);
     }
 }

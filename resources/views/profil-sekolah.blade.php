@@ -179,7 +179,29 @@
     {{-- TAUTAN FASILITAS --}}
     <section data-fade-in class="mb-20 opacity-0 translate-y-8 transition duration-700">
         <p class="text-brand-600 font-semibold text-sm tracking-wide uppercase mb-2">Fasilitas</p>
-        <h2 class="text-2xl md:text-3xl font-extrabold text-brand-950 tracking-tight mb-5">Sarana &amp; Prasarana</h2>
+        <h2 class="text-2xl md:text-3xl font-extrabold text-brand-950 tracking-tight mb-6">Sarana &amp; Prasarana</h2>
+
+        @php
+            // 3 foto fasilitas (diambil dari data Fasilitas yang sudah ada)
+            $fotoFasilitas = collect($sarpras ?? [])->filter(fn ($x) => !empty($x->foto))->take(3)->values();
+        @endphp
+        @if($fotoFasilitas->count())
+            <div class="grid grid-cols-3 gap-3 md:gap-5 mb-8">
+                @foreach($fotoFasilitas as $f)
+                    <a href="{{ route('fasilitas') }}"
+                       class="group relative block aspect-[3/4] md:aspect-[4/3] overflow-hidden rounded-2xl bg-brand-100 shadow-sm">
+                        <img src="{{ Storage::url($f->foto) }}" alt="{{ $f->nama }}"
+                             loading="lazy" decoding="async"
+                             class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-brand-950/80 via-brand-950/10 to-transparent opacity-80 group-hover:opacity-100 transition"></div>
+                        <div class="absolute inset-x-0 bottom-0 p-3 md:p-4 text-white text-xs md:text-sm font-semibold leading-snug">
+                            {{ $f->nama }}
+                        </div>
+                    </a>
+                @endforeach
+            </div>
+        @endif
+
         <a href="{{ route('fasilitas') }}"
            class="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold px-7 py-3.5 rounded-xl shadow-glow transition">
             Lihat fasilitas sekolah <span aria-hidden="true">&rarr;</span>
@@ -191,7 +213,7 @@
         <p class="text-brand-600 font-semibold text-sm tracking-wide uppercase mb-2">Pengakuan</p>
         <h2 class="text-2xl md:text-3xl font-extrabold text-brand-950 tracking-tight mb-6">Akreditasi</h2>
         @if($akreditasi)
-            <div class="inline-flex items-center gap-4 bg-gradient-to-br from-brand-900 to-brand-950 text-white px-6 py-5 rounded-2xl shadow-card">
+            <div class="flex w-full items-center gap-5 bg-gradient-to-br from-brand-900 to-brand-950 text-white px-6 md:px-8 py-6 rounded-2xl shadow-card">
                 @if($akreditasi->logo)
                     <div class="w-16 h-16 shrink-0 rounded-2xl bg-white flex items-center justify-center overflow-hidden">
                         <img src="{{ Storage::url($akreditasi->logo) }}" alt="Logo akreditasi {{ $akreditasi->peringkat }}"

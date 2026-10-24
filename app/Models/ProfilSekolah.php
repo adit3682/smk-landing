@@ -45,10 +45,12 @@ class ProfilSekolah extends Model
         'struktur_gambar',
         'video_profil_url',
         'spmb_brosur_pdf',
+        'spmb_mitra_logo',
     ];
     protected $casts = [
     'misi' => 'array',
     'spmb_posters' => 'array',
+    'spmb_mitra_logo' => 'array',
 ];
 
     public function getGmapsEmbedUrlAttribute(): ?string

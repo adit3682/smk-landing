@@ -99,12 +99,17 @@ class ProfilSekolahResource extends Resource
             ->rows(5)
             ->helperText('Kosongkan untuk memakai teks bawaan.'),
 
-        Forms\Components\TextInput::make('video_profil_url')
-            ->label('Link Video YouTube (Profil Sekolah)')
-            ->url()
-            ->placeholder('https://www.youtube.com/watch?v=...')
-            ->helperText('Tempel link YouTube. Kosongkan jika tidak ingin menampilkan video.'),
     ]),
+
+            Forms\Components\Section::make('Video Profil Sekolah')
+                ->description('Ditampilkan di halaman Profil Sekolah')
+                ->schema([
+                    Forms\Components\TextInput::make('video_profil_url')
+                        ->label('Link Video YouTube')
+                        ->url()
+                        ->placeholder('https://www.youtube.com/watch?v=...')
+                        ->helperText('Tempel link YouTube (mode Tidak publik juga bisa). Kosongkan jika tidak ingin menampilkan video.'),
+                ]),
 
             Forms\Components\Textarea::make('visi')
                 ->columnSpanFull(),
@@ -130,6 +135,16 @@ class ProfilSekolahResource extends Resource
                 ->url()
                 ->placeholder('https://tiktok.com/@namaakun'),
 
+            Forms\Components\Section::make('Struktur Organisasi')
+                ->description('Ditampilkan di halaman Profil Sekolah')
+                ->schema([
+                    Forms\Components\FileUpload::make('struktur_gambar')
+                        ->label('Gambar Struktur Organisasi')
+                        ->image()->directory('profil')->imageEditor()
+                        ->saveUploadedFileUsing(\App\Support\ImageUpload::webp('profil', 90))
+                        ->helperText('Unggah gambar bagan utuh. Disarankan lebar minimal 1600px.'),
+                ]),
+
             // SPMB
             Forms\Components\Section::make('SPMB')
                 ->description('Ditampilkan di halaman /spmb')
@@ -143,7 +158,7 @@ class ProfilSekolahResource extends Resource
                         ->saveUploadedFileUsing(
                             \App\Support\ImageUpload::webp('spmb', 90)
                         )
-                        ->label('Poster SPMB (bisa lebih dari satu)'),
+                        ->label('Poster SPMB (yang ditampilkan di halaman: poster pertama)'),
 
                     Forms\Components\TextInput::make('spmb_link')
                         ->url()
@@ -194,19 +209,28 @@ class ProfilSekolahResource extends Resource
                         ->rows(6)
                         ->helperText('Satu prestasi per baris.'),
 
+                    Forms\Components\Repeater::make('spmb_mitra_logo')
+                        ->label('Mitra Industri (logo & nama)')
+                        ->schema([
+                            Forms\Components\TextInput::make('nama')->label('Nama industri')->required(),
+                            Forms\Components\FileUpload::make('logo')
+                                ->label('Logo')->image()->imageEditor()
+                                ->directory('mitra')
+                                ->saveUploadedFileUsing(\App\Support\ImageUpload::webp('mitra', 90)),
+                        ])
+                        ->columns(2)->columnSpanFull()
+                        ->reorderable()->collapsible()
+                        ->itemLabel(fn (array $state) => $state['nama'] ?? null)
+                        ->addActionLabel('Tambah mitra')
+                        ->defaultItems(0),
+
                     Forms\Components\Textarea::make('spmb_mitra')
-                        ->label('Mitra Industri')->rows(4)
-                        ->helperText('Satu baris = satu mitra.'),
+                        ->label('Mitra Industri (daftar nama, cadangan)')->rows(3)
+                        ->helperText('Hanya dipakai jika daftar logo di atas kosong. Satu baris = satu mitra.'),
 
                     Forms\Components\Textarea::make('spmb_testimoni')
                         ->label('Kata Alumni')->rows(8)
                         ->helperText('Satu baris = satu testimoni. Format: Kutipan | Nama | Keterangan'),
-
-                       Forms\Components\FileUpload::make('struktur_gambar')
-                        ->label('Gambar Struktur Organisasi')
-                        ->image()->directory('profil')->imageEditor()
-                        ->saveUploadedFileUsing(\App\Support\ImageUpload::webp('profil', 90))
-                        ->helperText('Unggah gambar bagan utuh. Disarankan lebar minimal 1600px.'),
 
                      Forms\Components\FileUpload::make('spmb_brosur_pdf')
                         ->label('File PDF Brosur & Poster SPMB (gabungan)')
