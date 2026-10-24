@@ -186,17 +186,27 @@
             $fotoFasilitas = collect($sarpras ?? [])->filter(fn ($x) => !empty($x->foto))->take(3)->values();
         @endphp
         @if($fotoFasilitas->count())
-            <div class="grid grid-cols-3 gap-3 md:gap-5 mb-8">
+            <style>
+                .fas-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 32px; }
+                .fas-item { position: relative; display: block; overflow: hidden; border-radius: 16px; background: #d9ebff;
+                            aspect-ratio: 3 / 4; box-shadow: 0 1px 2px rgba(15,23,42,.08); }
+                .fas-item img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
+                .fas-item:hover img { transform: scale(1.05); }
+                .fas-item .fas-shade { position: absolute; inset: 0; background: linear-gradient(to top, rgba(20,34,87,.8), rgba(20,34,87,.1) 55%, transparent); opacity: .85; transition: opacity .3s; }
+                .fas-item:hover .fas-shade { opacity: 1; }
+                .fas-item .fas-nama { position: absolute; left: 0; right: 0; bottom: 0; padding: 12px; color: #fff; font-size: 12px; font-weight: 600; line-height: 1.3; }
+                @media (min-width: 768px) {
+                    .fas-grid { gap: 20px; }
+                    .fas-item { aspect-ratio: 4 / 3; }
+                    .fas-item .fas-nama { padding: 16px; font-size: 14px; }
+                }
+            </style>
+            <div class="fas-grid">
                 @foreach($fotoFasilitas as $f)
-                    <a href="{{ route('fasilitas') }}"
-                       class="group relative block aspect-[3/4] md:aspect-[4/3] overflow-hidden rounded-2xl bg-brand-100 shadow-sm">
-                        <img src="{{ Storage::url($f->foto) }}" alt="{{ $f->nama }}"
-                             loading="lazy" decoding="async"
-                             class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
-                        <div class="absolute inset-0 bg-gradient-to-t from-brand-950/80 via-brand-950/10 to-transparent opacity-80 group-hover:opacity-100 transition"></div>
-                        <div class="absolute inset-x-0 bottom-0 p-3 md:p-4 text-white text-xs md:text-sm font-semibold leading-snug">
-                            {{ $f->nama }}
-                        </div>
+                    <a href="{{ route('fasilitas') }}" class="fas-item">
+                        <img src="{{ Storage::url($f->foto) }}" alt="{{ $f->nama }}" loading="lazy" decoding="async">
+                        <span class="fas-shade"></span>
+                        <span class="fas-nama">{{ $f->nama }}</span>
                     </a>
                 @endforeach
             </div>
